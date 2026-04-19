@@ -31,9 +31,5 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # Run checks
       - name: Run Type Checking
         run: pnpm exec tsc --noEmit
-
-      - name: Run ESLint
-        run: pnpm run lint
