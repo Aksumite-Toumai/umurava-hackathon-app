@@ -85,8 +85,6 @@ AUTH_SECRET=$(openssl rand -base64 32)
 | Certifications | 10% |
 | Other (extracurriculars, leadership) | 8% |
 
-See [`docs/scoring_weights.md`](docs/scoring_weights.md) for details.
-
 ## Screening Flow
 
 ```
@@ -98,8 +96,6 @@ ONE Gemini call with job + all candidates
    ↓
 Scored, ranked, explained → shown in sidebar
 ```
-
-See [`docs/screening_flow.md`](docs/screening_flow.md) for the full flow.
 
 ## Checks
 
