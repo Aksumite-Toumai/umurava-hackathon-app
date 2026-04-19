@@ -1,60 +1,72 @@
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 
-import type { ParsedApplicant } from "@/app/lib/schemas/candidate";
+import type { TalentProfile } from "@/app/lib/schemas/candidate";
+import type { ParsedCandidate, FileParseResult } from "./file-parser";
 
 // Common column name mappings (lowercase) → our field names
 const COLUMN_MAP: Record<string, string> = {
-  name: "name",
-  "full name": "name",
-  full_name: "name",
-  "candidate name": "name",
-  applicant: "name",
+  // Name
+  "first name": "first_name",
+  first_name: "first_name",
+  firstname: "first_name",
+  "last name": "last_name",
+  last_name: "last_name",
+  lastname: "last_name",
+  surname: "last_name",
+  name: "full_name",
+  "full name": "full_name",
+  full_name: "full_name",
+  "candidate name": "full_name",
+
+  // Contact
   email: "email",
   "email address": "email",
   "e-mail": "email",
-  phone: "phone",
-  "phone number": "phone",
-  mobile: "phone",
-  contact: "phone",
+
+  // Headline / summary / bio
+  headline: "headline",
+  title: "headline",
+  "job title": "headline",
+  bio: "bio",
+  about: "bio",
+  summary: "bio",
+  profile: "bio",
+
+  // Location
+  location: "location",
+  city: "location",
+
+  // Skills (free text comma-separated)
   skills: "skills",
   "technical skills": "skills",
   competencies: "skills",
-  experience: "experience_years",
-  "years of experience": "experience_years",
-  "experience (years)": "experience_years",
-  yoe: "experience_years",
-  education: "education",
-  degree: "education",
-  qualification: "education",
-  summary: "summary",
-  about: "summary",
-  bio: "summary",
-  profile: "summary",
 };
 
-export type ParseResult = {
-  applicants: ParsedApplicant[];
-  errors: string[];
-};
-
-export function parseCsv(content: string): ParseResult {
+export function parseCsv(
+  content: string,
+): Pick<FileParseResult, "candidates" | "errors"> {
   const parsed = Papa.parse<Record<string, string>>(content, {
     header: true,
     skipEmptyLines: true,
   });
 
   if (parsed.errors.length > 0 && !parsed.data.length) {
-    return { applicants: [], errors: parsed.errors.map((e) => e.message) };
+    return {
+      candidates: [],
+      errors: parsed.errors.map((e) => e.message),
+    };
   }
 
-  return rowsToApplicants(parsed.data);
+  return rowsToCandidates(parsed.data, "csv");
 }
 
-export function parseExcel(buffer: Buffer): ParseResult {
+export function parseExcel(
+  buffer: Buffer,
+): Pick<FileParseResult, "candidates" | "errors"> {
   const workbook = XLSX.read(buffer, { type: "buffer" });
   const sheetName = workbook.SheetNames[0];
-  if (!sheetName) return { applicants: [], errors: ["No sheets found."] };
+  if (!sheetName) return { candidates: [], errors: ["No sheets found."] };
 
   const sheet = workbook.Sheets[sheetName];
   const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, {
@@ -66,41 +78,49 @@ export function parseExcel(buffer: Buffer): ParseResult {
     return Object.fromEntries(entries) as Record<string, string>;
   });
 
-  return rowsToApplicants(stringRows);
+  return rowsToCandidates(stringRows, "xlsx");
 }
 
-function rowsToApplicants(rows: Record<string, string>[]): ParseResult {
+function rowsToCandidates(
+  rows: Record<string, string>[],
+  source: "csv" | "xlsx",
+): Pick<FileParseResult, "candidates" | "errors"> {
   const errors: string[] = [];
 
   if (rows.length === 0) {
-    return { applicants: [], errors: ["File is empty or has no data rows."] };
+    return { candidates: [], errors: ["File is empty or has no data rows."] };
   }
 
   const columns = Object.keys(rows[0]);
   const fieldMap = mapColumns(columns);
 
-  if (!Object.values(fieldMap).includes("name")) {
+  if (
+    !Object.values(fieldMap).includes("email") &&
+    !Object.values(fieldMap).includes("full_name") &&
+    !Object.values(fieldMap).includes("first_name")
+  ) {
     return {
-      applicants: [],
+      candidates: [],
       errors: [
-        `Could not find a 'name' column. Available: ${columns.join(", ")}`,
+        `Could not find a 'name' or 'email' column. Available: ${columns.join(", ")}`,
       ],
     };
   }
 
-  const applicants: ParsedApplicant[] = [];
+  const candidates: ParsedCandidate[] = [];
 
   rows.forEach((row, idx) => {
     try {
-      applicants.push(rowToApplicant(row, fieldMap));
+      const profile = rowToProfile(row, fieldMap);
+      candidates.push({ profile, source, raw_resume_text: null });
     } catch (e) {
       errors.push(
-        `Row ${idx + 2}: ${e instanceof Error ? e.message : "unknown error"}`,
+        `Row ${idx + 2}: ${e instanceof Error ? e.message : "unknown"}`,
       );
     }
   });
 
-  return { applicants, errors };
+  return { candidates, errors };
 }
 
 function mapColumns(columns: string[]): Record<string, string> {
@@ -114,55 +134,54 @@ function mapColumns(columns: string[]): Record<string, string> {
   return mapped;
 }
 
-function rowToApplicant(
+function rowToProfile(
   row: Record<string, string>,
   fieldMap: Record<string, string>,
-): ParsedApplicant {
-  const raw: Record<string, unknown> = {};
+): TalentProfile {
+  const raw: Record<string, string> = {};
 
   for (const [col, field] of Object.entries(fieldMap)) {
-    const rawValue = row[col];
-    if (rawValue === undefined || rawValue === null || rawValue === "") continue;
-
-    const value = String(rawValue).trim();
+    const value = (row[col] ?? "").toString().trim();
     if (!value) continue;
-
-    if (field === "skills") {
-      raw[field] = value
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
-    } else if (field === "education") {
-      raw[field] = [value];
-    } else if (field === "experience_years") {
-      const num = parseFloat(value);
-      if (!isNaN(num)) {
-        raw[field] = num;
-      } else {
-        raw.experience_details = [value];
-      }
-    } else {
-      raw[field] = value;
-    }
+    raw[field] = value;
   }
 
-  const name = raw.name;
-  if (!name || typeof name !== "string") {
-    throw new Error("Missing or invalid name");
+  let first_name = raw.first_name ?? "";
+  let last_name = raw.last_name ?? "";
+  if (raw.full_name && !first_name && !last_name) {
+    const parts = raw.full_name.split(/\s+/);
+    first_name = parts[0] ?? "";
+    last_name = parts.slice(1).join(" ");
   }
+
+  const email = raw.email;
+  if (!email) throw new Error("Missing email");
+
+  // Skills as objects (default to Intermediate / 0 yoe — Gemini can refine later)
+  const skills = (raw.skills ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((name) => ({
+      name,
+      level: "Intermediate" as const,
+      yearsOfExperience: 0,
+    }));
 
   return {
-    name,
-    email: typeof raw.email === "string" ? raw.email : null,
-    phone: typeof raw.phone === "string" ? raw.phone : null,
-    skills: Array.isArray(raw.skills) ? (raw.skills as string[]) : [],
-    experience_years:
-      typeof raw.experience_years === "number" ? raw.experience_years : null,
-    experience_details: Array.isArray(raw.experience_details)
-      ? (raw.experience_details as string[])
-      : [],
-    education: Array.isArray(raw.education) ? (raw.education as string[]) : [],
-    summary: typeof raw.summary === "string" ? raw.summary : null,
-    raw_resume_text: null,
+    first_name,
+    last_name,
+    email,
+    headline: raw.headline ?? "",
+    bio: raw.bio ?? null,
+    location: raw.location ?? "",
+    skills,
+    languages: null,
+    experience: [],
+    education: [],
+    certifications: null,
+    projects: [],
+    availability: undefined,
+    socialLinks: null,
   };
 }

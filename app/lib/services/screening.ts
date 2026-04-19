@@ -1,8 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
 import type {
-  ParsedApplicant,
+  CandidateDocument,
   ScreeningResult,
+  TalentProfile,
 } from "@/app/lib/schemas/candidate";
 
 export type ScreeningRequest = {
@@ -14,17 +15,21 @@ export type ScreeningRequest = {
   top_n: number;
 };
 
+// What Gemini returns per candidate
+export type EnrichedCandidate = ScreeningResult & {
+  email: string;
+  // Optional schema enrichment from raw resume text (PDFs)
+  enriched_profile?: Partial<TalentProfile>;
+};
+
 export type ScreeningResponse = {
   job_title: string;
   total_evaluated: number;
-  shortlist: (ScreeningResult & {
-    name: string;
-    email: string | null;
-  })[];
+  shortlist: EnrichedCandidate[];
   screening_summary: string;
 };
 
-// Fixed default weights — documented in docs/scoring_weights.md
+// Fixed default weights — see docs/scoring_weights.md
 export const SCORING_WEIGHTS = {
   work_experience: 0.3,
   skills_match: 0.25,
@@ -34,38 +39,47 @@ export const SCORING_WEIGHTS = {
   other: 0.08,
 } as const;
 
-const SYSTEM_PROMPT = `You are an expert recruitment AI assistant. Your job is to evaluate \
-job applicants against a job description and produce a structured, fair, and transparent \
-ranking.
+const SYSTEM_PROMPT = `You are an expert recruitment AI assistant. You evaluate job \
+applicants against a job description and produce a structured, fair, and transparent ranking \
+that follows the Umurava Talent Profile schema.
 
 For each candidate, you will:
-1. Extract structured information from their resume/profile data.
-2. Score them across 6 categories (0-100 each):
+
+1. If the candidate has only raw resume text (no structured data), EXTRACT structured fields \
+into the Talent Profile schema. If they already have full structured data, use it as-is.
+
+2. Score the candidate across 6 categories (0-100 each):
    - work_experience (30% weight): Relevance of roles, responsibilities, years of experience
    - skills_match (25% weight): How well their skills match the job requirements
    - projects_portfolio (15% weight): Relevant projects, contributions, demonstrable impact
    - education (12% weight): Degree level, field relevance, institution quality
    - certifications (10% weight): Professional certifications, courses, ongoing learning
    - other (8% weight): Extracurriculars, leadership, volunteering, soft skills, cultural fit
-3. Calculate the final_score as the weighted average using the weights above.
+
+3. Compute final_score = weighted average using the weights above.
 4. Rank all candidates by final_score (highest first).
-5. For each candidate in the shortlist, provide:
-   - strengths: 2-4 specific strengths with evidence from their profile
-   - gaps: 1-3 specific gaps or risks relative to the job
+5. For each candidate, provide:
+   - strengths: 2-4 specific strengths with evidence
+   - gaps: 1-3 specific gaps or risks vs. the job
    - recommendation: 1-2 sentence recruiter-friendly summary
 
-IMPORTANT RULES:
+RULES:
 - Be objective and evidence-based. Cite specifics from the candidate's data.
 - If a candidate has no data for a category, score it 0.
-- If a candidate only has raw resume text (no structured data), extract what you can.
-- Return ONLY valid JSON matching the schema below. No markdown, no explanation outside JSON.
+- Field naming MUST match the Talent Profile schema EXACTLY (including spaces and case):
+  "Start Date", "End Date", "Is Current", "Field of Study", "Start Year", "End Year",
+  "Issue Date", "yearsOfExperience", "socialLinks".
+- Skill levels must be one of: Beginner, Intermediate, Advanced, Expert.
+- Language proficiency must be one of: Basic, Conversational, Fluent, Native.
+- Availability status must be one of: Available, Open to Opportunities, Not Available.
+- Availability type must be one of: Full-time, Part-time, Contract.
+- Return ONLY valid JSON. No markdown fences, no commentary.
 
-OUTPUT JSON SCHEMA:
+OUTPUT JSON SHAPE:
 {
   "shortlist": [
     {
-      "name": "string",
-      "email": "string or null",
+      "email": "string (use the candidate's email exactly as provided)",
       "scores": {
         "work_experience": 0-100,
         "skills_match": 0-100,
@@ -78,7 +92,28 @@ OUTPUT JSON SCHEMA:
       "rank": 1,
       "strengths": ["string"],
       "gaps": ["string"],
-      "recommendation": "string"
+      "recommendation": "string",
+      "enriched_profile": {
+        // Only include for candidates whose data was raw text (PDF) and you extracted it.
+        // For already-structured candidates, omit this field.
+        // Use Talent Profile schema field names exactly.
+        "first_name": "string",
+        "last_name": "string",
+        "headline": "string",
+        "bio": "string",
+        "location": "string",
+        "skills": [{"name": "...", "level": "Intermediate", "yearsOfExperience": 3}],
+        "experience": [{
+          "company": "...", "role": "...",
+          "Start Date": "YYYY-MM", "End Date": "YYYY-MM | Present",
+          "description": "...", "technologies": [...], "Is Current": true
+        }],
+        "education": [{
+          "institution": "...", "degree": "...",
+          "Field of Study": "...", "Start Year": 2020, "End Year": 2024
+        }],
+        "projects": [...], "certifications": [...]
+      }
     }
   ],
   "total_evaluated": number,
@@ -87,7 +122,7 @@ OUTPUT JSON SCHEMA:
 
 export async function screenCandidates(
   job: ScreeningRequest,
-  applicants: ParsedApplicant[],
+  candidates: CandidateDocument[],
 ): Promise<ScreeningResponse> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY not set");
@@ -95,7 +130,7 @@ export async function screenCandidates(
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const ai = new GoogleGenAI({ apiKey });
 
-  const userPrompt = buildUserPrompt(job, applicants);
+  const userPrompt = buildUserPrompt(job, candidates);
 
   const response = await ai.models.generateContent({
     model,
@@ -118,7 +153,7 @@ export async function screenCandidates(
 
   return {
     job_title: job.job_title,
-    total_evaluated: data.total_evaluated || applicants.length,
+    total_evaluated: data.total_evaluated || candidates.length,
     shortlist: data.shortlist || [],
     screening_summary: data.screening_summary || "",
   };
@@ -126,7 +161,7 @@ export async function screenCandidates(
 
 function buildUserPrompt(
   job: ScreeningRequest,
-  applicants: ParsedApplicant[],
+  candidates: CandidateDocument[],
 ): string {
   const lines: string[] = [
     "## JOB DETAILS",
@@ -138,33 +173,41 @@ function buildUserPrompt(
     "",
     `Return the top ${job.top_n} candidates.`,
     "",
-    `## CANDIDATES (${applicants.length} total)`,
+    `## CANDIDATES (${candidates.length} total)`,
     "",
   ];
 
-  applicants.forEach((a, i) => {
+  candidates.forEach((c, i) => {
     lines.push(`### Candidate ${i + 1}`);
-    lines.push(`**Name:** ${a.name}`);
-    if (a.email) lines.push(`**Email:** ${a.email}`);
+    lines.push(`**Email:** ${c.email}`);
 
-    if (a.skills.length > 0) {
-      lines.push(`**Skills:** ${a.skills.join(", ")}`);
-    }
-    if (a.experience_years !== null) {
-      lines.push(`**Years of Experience:** ${a.experience_years}`);
-    }
-    if (a.experience_details.length > 0) {
-      lines.push(`**Experience:** ${a.experience_details.join("; ")}`);
-    }
-    if (a.education.length > 0) {
-      lines.push(`**Education:** ${a.education.join("; ")}`);
-    }
-    if (a.summary) {
-      lines.push(`**Summary:** ${a.summary}`);
-    }
-    if (a.raw_resume_text) {
+    if (c.raw_resume_text) {
+      // PDF source — let Gemini extract everything
+      lines.push("**Source:** raw resume markdown (extract structured fields)");
       lines.push("");
-      lines.push(`**Full Resume:**\n${a.raw_resume_text}`);
+      lines.push("**Resume:**");
+      lines.push(c.raw_resume_text);
+    } else {
+      // Structured profile — feed full talent profile JSON
+      const profileForPrompt = {
+        first_name: c.first_name,
+        last_name: c.last_name,
+        headline: c.headline,
+        bio: c.bio,
+        location: c.location,
+        skills: c.skills,
+        languages: c.languages,
+        experience: c.experience,
+        education: c.education,
+        certifications: c.certifications,
+        projects: c.projects,
+        availability: c.availability,
+        socialLinks: c.socialLinks,
+      };
+      lines.push("**Source:** structured profile");
+      lines.push("```json");
+      lines.push(JSON.stringify(profileForPrompt, null, 2));
+      lines.push("```");
     }
 
     lines.push("");

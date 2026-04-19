@@ -6,6 +6,10 @@ import {
   SparklesIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  MapPinIcon,
+  BriefcaseIcon,
+  AcademicCapIcon,
+  LinkIcon,
 } from "@heroicons/react/24/outline";
 
 type Screening = {
@@ -24,10 +28,38 @@ type Screening = {
   recommendation: string;
 };
 
+type Skill = { name: string; level: string; yearsOfExperience: number };
+type ExperienceEntry = {
+  company: string;
+  role: string;
+  "Start Date": string;
+  "End Date": string;
+  "Is Current"?: boolean;
+};
+type EducationEntry = {
+  institution: string;
+  degree: string;
+  "Field of Study": string;
+  "Start Year": number;
+  "End Year": number;
+};
+type ProjectEntry = {
+  name: string;
+  description: string;
+  link?: string;
+};
+
 type Candidate = {
   _id: string;
-  name: string;
-  email?: string | null;
+  first_name?: string;
+  last_name?: string;
+  email: string;
+  headline?: string;
+  location?: string;
+  skills?: Skill[];
+  experience?: ExperienceEntry[];
+  education?: EducationEntry[];
+  projects?: ProjectEntry[];
   screening?: Screening | null;
 };
 
@@ -46,6 +78,11 @@ function ScoreBar({ label, score }: { label: string; score: number }) {
   );
 }
 
+function fullName(c: Candidate): string {
+  const name = `${c.first_name ?? ""} ${c.last_name ?? ""}`.trim();
+  return name || c.email;
+}
+
 export default function TalentSidebar({
   candidates,
 }: {
@@ -53,7 +90,6 @@ export default function TalentSidebar({
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Only show screened candidates, sorted by rank
   const screened = candidates
     .filter((c) => c.screening?.rank)
     .sort((a, b) => (a.screening!.rank ?? 0) - (b.screening!.rank ?? 0));
@@ -64,7 +100,7 @@ export default function TalentSidebar({
         <UserCircleIcon className="mx-auto mb-2 h-8 w-8 text-gray-300" />
         <p className="text-sm">
           {candidates.length > 0
-            ? "Candidates uploaded. Click \"Screen Candidates\" to run AI screening."
+            ? `${candidates.length} candidate${candidates.length !== 1 ? "s" : ""} uploaded. Click "Screen Candidates" to run AI screening.`
             : "No candidates yet. Upload a file when creating or editing the job."}
         </p>
       </div>
@@ -96,28 +132,51 @@ export default function TalentSidebar({
                 }
                 className="flex w-full items-center justify-between text-left"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-800">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-800">
                     #{s.rank}
                   </div>
-                  <div>
-                    <p className="font-semibold text-stone-900">
-                      {candidate.name}
+                  <div className="min-w-0">
+                    <p className="font-semibold text-stone-900 truncate">
+                      {fullName(candidate)}
                     </p>
+                    {candidate.headline && (
+                      <p className="text-xs text-stone-600 truncate">
+                        {candidate.headline}
+                      </p>
+                    )}
                     <p className="text-xs font-medium text-stone-500">
                       Score: {s.final_score.toFixed(1)}/100
                     </p>
                   </div>
                 </div>
                 {isExpanded ? (
-                  <ChevronUpIcon className="h-5 w-5 text-gray-400" />
+                  <ChevronUpIcon className="h-5 w-5 text-gray-400 shrink-0" />
                 ) : (
-                  <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+                  <ChevronDownIcon className="h-5 w-5 text-gray-400 shrink-0" />
                 )}
               </button>
 
               {isExpanded && (
                 <div className="mt-4 space-y-4">
+                  {/* Quick info */}
+                  {(candidate.location || candidate.email) && (
+                    <div className="text-xs text-stone-600 space-y-1">
+                      {candidate.location && (
+                        <div className="flex items-center gap-1">
+                          <MapPinIcon className="h-3 w-3" />
+                          {candidate.location}
+                        </div>
+                      )}
+                      {candidate.email && (
+                        <div className="flex items-center gap-1">
+                          <LinkIcon className="h-3 w-3" />
+                          {candidate.email}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Score breakdown */}
                   <div className="rounded-lg bg-gray-50 p-3 space-y-2">
                     <p className="text-xs font-semibold text-stone-700 mb-2">
@@ -136,6 +195,72 @@ export default function TalentSidebar({
                     <ScoreBar label="Certs" score={s.scores.certifications} />
                     <ScoreBar label="Other" score={s.scores.other} />
                   </div>
+
+                  {/* Skills with levels */}
+                  {candidate.skills && candidate.skills.length > 0 && (
+                    <div className="rounded-lg bg-stone-50 p-3">
+                      <p className="text-xs font-semibold text-stone-700 mb-2">
+                        Skills
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {candidate.skills.slice(0, 12).map((skill, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs text-stone-700 ring-1 ring-stone-200"
+                            title={`${skill.level} • ${skill.yearsOfExperience}y`}
+                          >
+                            {skill.name}
+                            <span className="text-stone-400">
+                              · {skill.level[0]}
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Experience timeline */}
+                  {candidate.experience && candidate.experience.length > 0 && (
+                    <div className="rounded-lg bg-stone-50 p-3">
+                      <p className="flex items-center gap-1 text-xs font-semibold text-stone-700 mb-2">
+                        <BriefcaseIcon className="h-3 w-3" /> Experience
+                      </p>
+                      <ul className="space-y-1.5">
+                        {candidate.experience.slice(0, 4).map((exp, i) => (
+                          <li key={i} className="text-xs">
+                            <span className="font-medium text-stone-900">
+                              {exp.role}
+                            </span>{" "}
+                            <span className="text-stone-500">at</span>{" "}
+                            <span className="text-stone-700">{exp.company}</span>
+                            <span className="text-stone-400 ml-1">
+                              ({exp["Start Date"]} – {exp["End Date"]})
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Education */}
+                  {candidate.education && candidate.education.length > 0 && (
+                    <div className="rounded-lg bg-stone-50 p-3">
+                      <p className="flex items-center gap-1 text-xs font-semibold text-stone-700 mb-2">
+                        <AcademicCapIcon className="h-3 w-3" /> Education
+                      </p>
+                      <ul className="space-y-1">
+                        {candidate.education.map((edu, i) => (
+                          <li key={i} className="text-xs text-stone-700">
+                            <span className="font-medium">{edu.degree}</span> in{" "}
+                            {edu["Field of Study"]} ·{" "}
+                            <span className="text-stone-500">
+                              {edu.institution}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {/* Strengths */}
                   {s.strengths.length > 0 && (
@@ -170,9 +295,7 @@ export default function TalentSidebar({
                     <p className="text-xs font-semibold text-amber-900 mb-1">
                       Recommendation
                     </p>
-                    <p className="text-xs text-stone-700">
-                      {s.recommendation}
-                    </p>
+                    <p className="text-xs text-stone-700">{s.recommendation}</p>
                   </div>
                 </div>
               )}

@@ -4,11 +4,8 @@ import { ObjectId } from "mongodb";
 import { getDb } from "@/app/lib/db/mongodb";
 import { parseUploadedFile } from "@/app/lib/services/file-parser";
 
-const ALLOWED_EXTENSIONS = [".pdf", ".csv", ".xlsx", ".xls"];
-const MAX_UPLOAD_SIZE_MB = parseInt(
-  process.env.MAX_UPLOAD_SIZE_MB || "10",
-  10,
-);
+const ALLOWED_EXTENSIONS = [".pdf", ".csv", ".xlsx", ".xls", ".json"];
+const MAX_UPLOAD_SIZE_MB = parseInt(process.env.MAX_UPLOAD_SIZE_MB || "10", 10);
 
 export async function POST(
   req: NextRequest,
@@ -68,17 +65,11 @@ export async function POST(
     const candidates = db.collection("candidates");
     const created_at = new Date().toISOString();
 
-    const docs = result.applicants.map((a) => ({
+    const docs = result.candidates.map((c) => ({
       job_id,
-      name: a.name,
-      email: a.email,
-      phone: a.phone,
-      skills: a.skills,
-      experience_years: a.experience_years,
-      experience_details: a.experience_details,
-      education: a.education,
-      summary: a.summary,
-      raw_resume_text: a.raw_resume_text,
+      ...c.profile,
+      source: c.source,
+      raw_resume_text: c.raw_resume_text,
       screening: null,
       created_at,
     }));

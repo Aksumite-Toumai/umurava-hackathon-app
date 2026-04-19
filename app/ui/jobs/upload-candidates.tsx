@@ -17,7 +17,7 @@ export default function UploadCandidates({ jobId }: { jobId: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const ALLOWED = [".pdf", ".csv", ".xlsx", ".xls"];
+  const ALLOWED = [".pdf", ".csv", ".xlsx", ".xls", ".json"];
 
   function handleFiles(selected: FileList | null) {
     if (!selected) return;
@@ -107,13 +107,13 @@ export default function UploadCandidates({ jobId }: { jobId: string }) {
             Drop files here or click to browse
           </p>
           <p className="text-xs text-stone-400 mt-1">
-            PDF, CSV, XLSX supported
+            PDF, CSV, XLSX, JSON supported
           </p>
           <input
             ref={inputRef}
             type="file"
             multiple
-            accept=".pdf,.csv,.xlsx,.xls"
+            accept=".pdf,.csv,.xlsx,.xls,.json"
             className="hidden"
             onChange={(e) => handleFiles(e.target.files)}
           />
