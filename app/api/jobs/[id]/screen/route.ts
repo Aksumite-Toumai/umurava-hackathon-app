@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { getDb } from "@/app/lib/db/mongodb";
 import { JobStatus } from "@/app/lib/schemas/job";
 import { screenCandidates } from "@/app/lib/services/screening";
-import type { ParsedApplicant } from "@/app/lib/schemas/candidate";
+import type { CandidateDocument } from "@/app/lib/schemas/candidate";
 
 export async function POST(
   _req: NextRequest,
@@ -37,16 +37,27 @@ export async function POST(
       );
     }
 
-    const applicants: ParsedApplicant[] = rows.map((c) => ({
-      name: c.name || "Unknown",
-      email: c.email ?? null,
-      phone: c.phone ?? null,
-      skills: c.skills || [],
-      experience_years: c.experience_years ?? null,
-      experience_details: c.experience_details || [],
-      education: c.education || [],
-      summary: c.summary ?? null,
+    const candidatesForScreening: CandidateDocument[] = rows.map((c) => ({
+      _id: c._id.toString(),
+      job_id: c.job_id,
+      first_name: c.first_name ?? "",
+      last_name: c.last_name ?? "",
+      email: c.email,
+      headline: c.headline ?? "",
+      bio: c.bio ?? null,
+      location: c.location ?? "",
+      skills: c.skills ?? [],
+      languages: c.languages ?? null,
+      experience: c.experience ?? [],
+      education: c.education ?? [],
+      certifications: c.certifications ?? null,
+      projects: c.projects ?? [],
+      availability: c.availability,
+      socialLinks: c.socialLinks ?? null,
+      source: c.source ?? "json",
       raw_resume_text: c.raw_resume_text ?? null,
+      screening: c.screening ?? null,
+      created_at: c.created_at,
     }));
 
     const required_skills = ((job.skills as string) || "")
@@ -60,29 +71,35 @@ export async function POST(
         job_description: (job.requirements as string) || "",
         required_skills,
         experience_level: (job.experience as string) || "",
-        top_n: Math.min(applicants.length, 20),
+        top_n: Math.min(candidatesForScreening.length, 20),
       },
-      applicants,
+      candidatesForScreening,
     );
 
-    // Store results back on each candidate (by email if available, else name)
     for (const c of result.shortlist) {
-      const filter: Record<string, unknown> = { job_id };
-      if (c.email) filter.email = c.email;
-      else filter.name = c.name;
-
-      await candidates.updateOne(filter, {
-        $set: {
-          screening: {
-            rank: c.rank,
-            final_score: c.final_score,
-            scores: c.scores,
-            strengths: c.strengths,
-            gaps: c.gaps,
-            recommendation: c.recommendation,
-          },
+      const update: Record<string, unknown> = {
+        screening: {
+          rank: c.rank,
+          final_score: c.final_score,
+          scores: c.scores,
+          strengths: c.strengths,
+          gaps: c.gaps,
+          recommendation: c.recommendation,
         },
-      });
+      };
+
+      if (c.enriched_profile) {
+        for (const [key, value] of Object.entries(c.enriched_profile)) {
+          if (value !== undefined && value !== null) {
+            update[key] = value;
+          }
+        }
+      }
+
+      await candidates.updateOne(
+        { job_id, email: c.email },
+        { $set: update },
+      );
     }
 
     await jobs.updateOne(

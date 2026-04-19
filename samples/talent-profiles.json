@@ -1,0 +1,535 @@
+{
+  "talents": [
+    {
+      "first_name": "Aisha",
+      "last_name": "Mwangi",
+      "email": "aisha.mwangi@example.com",
+      "headline": "Senior Backend Engineer — Node.js & PostgreSQL",
+      "bio": "Backend engineer with 7 years of experience building scalable APIs and event-driven systems for fintech and e-commerce platforms.",
+      "location": "Nairobi, Kenya",
+      "skills": [
+        { "name": "Node.js", "level": "Expert", "yearsOfExperience": 7 },
+        { "name": "TypeScript", "level": "Expert", "yearsOfExperience": 6 },
+        { "name": "PostgreSQL", "level": "Advanced", "yearsOfExperience": 6 },
+        { "name": "Redis", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "Docker", "level": "Advanced", "yearsOfExperience": 5 },
+        { "name": "AWS", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "Kubernetes", "level": "Intermediate", "yearsOfExperience": 2 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Fluent" },
+        { "name": "Swahili", "proficiency": "Native" }
+      ],
+      "experience": [
+        {
+          "company": "Pesalink",
+          "role": "Senior Backend Engineer",
+          "Start Date": "2022-03",
+          "End Date": "Present",
+          "description": "Lead backend developer for the payments platform processing 500k+ transactions/day. Designed event-driven microservices in Node.js, mentored a team of 4 engineers, and led migration from monolith to microservices.",
+          "technologies": ["Node.js", "TypeScript", "PostgreSQL", "Kafka", "Docker", "AWS"],
+          "Is Current": true
+        },
+        {
+          "company": "Jumia",
+          "role": "Backend Engineer",
+          "Start Date": "2019-06",
+          "End Date": "2022-02",
+          "description": "Built APIs and integrations for the e-commerce platform. Reduced average API latency by 40% via Redis caching and query optimization.",
+          "technologies": ["Node.js", "Express", "PostgreSQL", "Redis"],
+          "Is Current": false
+        },
+        {
+          "company": "Andela",
+          "role": "Junior Software Engineer",
+          "Start Date": "2017-08",
+          "End Date": "2019-05",
+          "description": "Worked on client projects across various stacks including Python, Node.js, and Ruby on Rails.",
+          "technologies": ["Python", "Node.js", "Ruby on Rails"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "University of Nairobi",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Science",
+          "Start Year": 2013,
+          "End Year": 2017
+        }
+      ],
+      "certifications": [
+        { "name": "AWS Certified Solutions Architect — Associate", "issuer": "Amazon", "Issue Date": "2023-04" }
+      ],
+      "projects": [
+        {
+          "name": "OpenPay",
+          "description": "Open-source payment gateway adapter for African mobile money providers (M-Pesa, MTN, Airtel).",
+          "technologies": ["Node.js", "TypeScript", "PostgreSQL"],
+          "role": "Maintainer",
+          "link": "https://github.com/example/openpay",
+          "Start Date": "2021-09",
+          "End Date": "Present"
+        }
+      ],
+      "availability": { "status": "Open to Opportunities", "type": "Full-time" },
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/aishamwangi",
+        "github": "https://github.com/aishamwangi"
+      }
+    },
+    {
+      "first_name": "Daniel",
+      "last_name": "Okeke",
+      "email": "daniel.okeke@example.com",
+      "headline": "Full Stack Developer — React & Django",
+      "bio": "Full stack developer with 4 years of experience focused on building delightful web applications.",
+      "location": "Lagos, Nigeria",
+      "skills": [
+        { "name": "React", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "TypeScript", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "Python", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "Django", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "PostgreSQL", "level": "Intermediate", "yearsOfExperience": 3 },
+        { "name": "Tailwind CSS", "level": "Advanced", "yearsOfExperience": 3 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Fluent" },
+        { "name": "Igbo", "proficiency": "Native" }
+      ],
+      "experience": [
+        {
+          "company": "Flutterwave",
+          "role": "Full Stack Engineer",
+          "Start Date": "2021-01",
+          "End Date": "Present",
+          "description": "Built and maintained merchant dashboard. Led migration of legacy Angular app to React + TypeScript.",
+          "technologies": ["React", "TypeScript", "Django", "PostgreSQL"],
+          "Is Current": true
+        },
+        {
+          "company": "Paystack",
+          "role": "Frontend Developer",
+          "Start Date": "2020-03",
+          "End Date": "2020-12",
+          "description": "Developed customer-facing dashboard components and improved accessibility.",
+          "technologies": ["React", "JavaScript", "CSS"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "University of Lagos",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Engineering",
+          "Start Year": 2015,
+          "End Year": 2019
+        }
+      ],
+      "certifications": [
+        { "name": "Meta Front-End Developer", "issuer": "Coursera", "Issue Date": "2022-08" }
+      ],
+      "projects": [
+        {
+          "name": "AfroPlaylist",
+          "description": "Spotify-like discovery app for Afrobeats artists.",
+          "technologies": ["Next.js", "Tailwind CSS", "Supabase"],
+          "role": "Solo Developer",
+          "link": "https://afroplaylist.example.com",
+          "Start Date": "2023-02",
+          "End Date": "2023-08"
+        }
+      ],
+      "availability": { "status": "Available", "type": "Full-time", "Start Date": "2026-05-01" },
+      "socialLinks": { "linkedin": "https://linkedin.com/in/danielokeke" }
+    },
+    {
+      "first_name": "Sara",
+      "last_name": "Tadesse",
+      "email": "sara.tadesse@example.com",
+      "headline": "Backend Engineer — Python, FastAPI, AWS",
+      "bio": "Backend engineer specializing in Python microservices and cloud infrastructure.",
+      "location": "Addis Ababa, Ethiopia",
+      "skills": [
+        { "name": "Python", "level": "Expert", "yearsOfExperience": 6 },
+        { "name": "FastAPI", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "PostgreSQL", "level": "Advanced", "yearsOfExperience": 5 },
+        { "name": "Docker", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "AWS", "level": "Expert", "yearsOfExperience": 5 },
+        { "name": "Terraform", "level": "Intermediate", "yearsOfExperience": 2 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Fluent" },
+        { "name": "Amharic", "proficiency": "Native" }
+      ],
+      "experience": [
+        {
+          "company": "ChapaPay",
+          "role": "Senior Backend Engineer",
+          "Start Date": "2023-01",
+          "End Date": "Present",
+          "description": "Lead backend engineer for fintech payments platform. Built FastAPI microservices and managed AWS infrastructure.",
+          "technologies": ["Python", "FastAPI", "PostgreSQL", "AWS", "Docker"],
+          "Is Current": true
+        },
+        {
+          "company": "Gebeya",
+          "role": "Backend Engineer",
+          "Start Date": "2020-04",
+          "End Date": "2022-12",
+          "description": "Built APIs for the talent marketplace. Migrated services from monolith to microservices.",
+          "technologies": ["Python", "Django", "PostgreSQL", "Docker"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "Addis Ababa University",
+          "degree": "Bachelor's",
+          "Field of Study": "Software Engineering",
+          "Start Year": 2014,
+          "End Year": 2019
+        }
+      ],
+      "certifications": [
+        { "name": "AWS Certified Solutions Architect — Professional", "issuer": "Amazon", "Issue Date": "2024-02" },
+        { "name": "Certified Kubernetes Administrator", "issuer": "CNCF", "Issue Date": "2023-06" }
+      ],
+      "projects": [
+        {
+          "name": "FastAPI Auth Toolkit",
+          "description": "Open-source authentication starter kit for FastAPI projects.",
+          "technologies": ["Python", "FastAPI", "PostgreSQL"],
+          "role": "Author",
+          "link": "https://github.com/example/fastapi-auth-toolkit",
+          "Start Date": "2022-06",
+          "End Date": "Present"
+        }
+      ],
+      "availability": { "status": "Open to Opportunities", "type": "Full-time" },
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/saratadesse",
+        "github": "https://github.com/saratadesse"
+      }
+    },
+    {
+      "first_name": "Kwame",
+      "last_name": "Asante",
+      "email": "kwame.asante@example.com",
+      "headline": "Frontend Engineer — React, Next.js, UX",
+      "bio": "Frontend engineer with a passion for accessible, performant web experiences.",
+      "location": "Accra, Ghana",
+      "skills": [
+        { "name": "React", "level": "Expert", "yearsOfExperience": 5 },
+        { "name": "Next.js", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "TypeScript", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "Tailwind CSS", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "GraphQL", "level": "Intermediate", "yearsOfExperience": 2 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Native" },
+        { "name": "Twi", "proficiency": "Native" }
+      ],
+      "experience": [
+        {
+          "company": "MTN Ghana",
+          "role": "Senior Frontend Engineer",
+          "Start Date": "2022-09",
+          "End Date": "Present",
+          "description": "Led frontend rebuild of consumer mobile app web portal. Improved Lighthouse scores from 60 to 95+.",
+          "technologies": ["React", "Next.js", "TypeScript", "GraphQL"],
+          "Is Current": true
+        },
+        {
+          "company": "Hubtel",
+          "role": "Frontend Engineer",
+          "Start Date": "2020-01",
+          "End Date": "2022-08",
+          "description": "Built merchant onboarding flows and dashboard.",
+          "technologies": ["React", "Redux", "JavaScript"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "Kwame Nkrumah University of Science and Technology",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Science",
+          "Start Year": 2014,
+          "End Year": 2018
+        }
+      ],
+      "certifications": [],
+      "projects": [
+        {
+          "name": "A11y Sentinel",
+          "description": "Browser extension that audits accessibility issues in real-time.",
+          "technologies": ["TypeScript", "React"],
+          "role": "Creator",
+          "link": "https://a11y-sentinel.example.com",
+          "Start Date": "2023-04",
+          "End Date": "Present"
+        }
+      ],
+      "availability": { "status": "Available", "type": "Full-time" },
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/kwameasante",
+        "portfolio": "https://kwameasante.dev"
+      }
+    },
+    {
+      "first_name": "Maria",
+      "last_name": "Santos",
+      "email": "maria.santos@example.com",
+      "headline": "Junior Data Scientist — Python & ML",
+      "bio": "Recent graduate exploring data science and ML applications in agriculture.",
+      "location": "Kigali, Rwanda",
+      "skills": [
+        { "name": "Python", "level": "Intermediate", "yearsOfExperience": 2 },
+        { "name": "Pandas", "level": "Intermediate", "yearsOfExperience": 2 },
+        { "name": "Scikit-Learn", "level": "Intermediate", "yearsOfExperience": 1 },
+        { "name": "SQL", "level": "Intermediate", "yearsOfExperience": 2 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Fluent" },
+        { "name": "Portuguese", "proficiency": "Native" },
+        { "name": "Kinyarwanda", "proficiency": "Conversational" }
+      ],
+      "experience": [
+        {
+          "company": "AgriTech Rwanda",
+          "role": "Data Analyst Intern",
+          "Start Date": "2024-06",
+          "End Date": "2024-12",
+          "description": "Built Python data pipelines to analyze crop yields. Authored monthly insights reports.",
+          "technologies": ["Python", "Pandas", "PostgreSQL"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "African Institute for Mathematical Sciences",
+          "degree": "Master's",
+          "Field of Study": "Data Science",
+          "Start Year": 2023,
+          "End Year": 2024
+        },
+        {
+          "institution": "University Eduardo Mondlane",
+          "degree": "Bachelor's",
+          "Field of Study": "Statistics",
+          "Start Year": 2018,
+          "End Year": 2022
+        }
+      ],
+      "certifications": [
+        { "name": "IBM Data Science Professional", "issuer": "Coursera", "Issue Date": "2024-03" }
+      ],
+      "projects": [
+        {
+          "name": "Maize Yield Predictor",
+          "description": "ML model predicting maize yields from satellite imagery and weather data.",
+          "technologies": ["Python", "TensorFlow", "Pandas"],
+          "role": "Author",
+          "Start Date": "2024-02",
+          "End Date": "2024-08"
+        }
+      ],
+      "availability": { "status": "Available", "type": "Full-time" },
+      "socialLinks": { "linkedin": "https://linkedin.com/in/mariasantos" }
+    },
+    {
+      "first_name": "Tunde",
+      "last_name": "Bello",
+      "email": "tunde.bello@example.com",
+      "headline": "DevOps Engineer — Kubernetes & Terraform",
+      "bio": "DevOps engineer focused on Kubernetes and infrastructure-as-code.",
+      "location": "Cape Town, South Africa",
+      "skills": [
+        { "name": "Kubernetes", "level": "Expert", "yearsOfExperience": 5 },
+        { "name": "Terraform", "level": "Expert", "yearsOfExperience": 4 },
+        { "name": "AWS", "level": "Advanced", "yearsOfExperience": 6 },
+        { "name": "GCP", "level": "Intermediate", "yearsOfExperience": 2 },
+        { "name": "Python", "level": "Intermediate", "yearsOfExperience": 4 },
+        { "name": "Go", "level": "Intermediate", "yearsOfExperience": 2 }
+      ],
+      "languages": [{ "name": "English", "proficiency": "Native" }],
+      "experience": [
+        {
+          "company": "Takealot",
+          "role": "Senior DevOps Engineer",
+          "Start Date": "2021-04",
+          "End Date": "Present",
+          "description": "Manage Kubernetes clusters serving the e-commerce platform. Built CI/CD pipelines reducing deploy time by 60%.",
+          "technologies": ["Kubernetes", "Terraform", "AWS", "Helm", "GitLab CI"],
+          "Is Current": true
+        },
+        {
+          "company": "Naked Insurance",
+          "role": "DevOps Engineer",
+          "Start Date": "2018-08",
+          "End Date": "2021-03",
+          "description": "Built infrastructure on AWS for insurtech platform. Migrated from EC2 to ECS.",
+          "technologies": ["AWS", "Terraform", "Docker", "Python"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "University of Cape Town",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Science",
+          "Start Year": 2012,
+          "End Year": 2016
+        }
+      ],
+      "certifications": [
+        { "name": "Certified Kubernetes Administrator", "issuer": "CNCF", "Issue Date": "2021-09" },
+        { "name": "AWS DevOps Engineer — Professional", "issuer": "Amazon", "Issue Date": "2022-05" },
+        { "name": "HashiCorp Certified: Terraform Associate", "issuer": "HashiCorp", "Issue Date": "2020-11" }
+      ],
+      "projects": [],
+      "availability": { "status": "Not Available", "type": "Full-time" },
+      "socialLinks": { "linkedin": "https://linkedin.com/in/tundebello" }
+    },
+    {
+      "first_name": "Lina",
+      "last_name": "Hassan",
+      "email": "lina.hassan@example.com",
+      "headline": "Mobile Engineer — React Native & Flutter",
+      "bio": "Mobile engineer with 4 years of cross-platform app experience.",
+      "location": "Cairo, Egypt",
+      "skills": [
+        { "name": "React Native", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "Flutter", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "TypeScript", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "Dart", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "Firebase", "level": "Intermediate", "yearsOfExperience": 3 }
+      ],
+      "languages": [
+        { "name": "Arabic", "proficiency": "Native" },
+        { "name": "English", "proficiency": "Fluent" }
+      ],
+      "experience": [
+        {
+          "company": "Swvl",
+          "role": "Mobile Engineer",
+          "Start Date": "2022-02",
+          "End Date": "Present",
+          "description": "Develop the rider app using React Native. Owned the booking and payments flows.",
+          "technologies": ["React Native", "TypeScript", "Firebase"],
+          "Is Current": true
+        },
+        {
+          "company": "Vezeeta",
+          "role": "Junior Mobile Developer",
+          "Start Date": "2020-06",
+          "End Date": "2022-01",
+          "description": "Built and maintained patient-facing Flutter apps.",
+          "technologies": ["Flutter", "Dart", "Firebase"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "Cairo University",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Science",
+          "Start Year": 2015,
+          "End Year": 2019
+        }
+      ],
+      "certifications": [],
+      "projects": [
+        {
+          "name": "PrayerTimes Pro",
+          "description": "Personal Islamic prayer times app with adhan notifications and Qibla finder.",
+          "technologies": ["Flutter", "Dart"],
+          "role": "Solo Developer",
+          "link": "https://prayertimes.example.com",
+          "Start Date": "2023-01",
+          "End Date": "2023-09"
+        }
+      ],
+      "availability": { "status": "Open to Opportunities", "type": "Contract" },
+      "socialLinks": { "linkedin": "https://linkedin.com/in/linahassan" }
+    },
+    {
+      "first_name": "James",
+      "last_name": "Mukasa",
+      "email": "james.mukasa@example.com",
+      "headline": "AI/ML Engineer — LLMs & Vector Search",
+      "bio": "AI engineer focused on production LLM systems, RAG, and vector databases.",
+      "location": "Kampala, Uganda",
+      "skills": [
+        { "name": "Python", "level": "Expert", "yearsOfExperience": 6 },
+        { "name": "PyTorch", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "LangChain", "level": "Advanced", "yearsOfExperience": 2 },
+        { "name": "FastAPI", "level": "Advanced", "yearsOfExperience": 3 },
+        { "name": "PostgreSQL", "level": "Advanced", "yearsOfExperience": 5 },
+        { "name": "pgvector", "level": "Advanced", "yearsOfExperience": 2 },
+        { "name": "Docker", "level": "Advanced", "yearsOfExperience": 4 },
+        { "name": "AWS", "level": "Intermediate", "yearsOfExperience": 3 }
+      ],
+      "languages": [
+        { "name": "English", "proficiency": "Fluent" },
+        { "name": "Luganda", "proficiency": "Native" }
+      ],
+      "experience": [
+        {
+          "company": "Andela",
+          "role": "Senior AI Engineer",
+          "Start Date": "2023-05",
+          "End Date": "Present",
+          "description": "Built RAG-based knowledge assistant for engineering teams. Designed embedding pipeline ingesting 100k+ docs.",
+          "technologies": ["Python", "FastAPI", "LangChain", "pgvector", "OpenAI", "PostgreSQL"],
+          "Is Current": true
+        },
+        {
+          "company": "Makerere AI Lab",
+          "role": "Research Engineer",
+          "Start Date": "2020-09",
+          "End Date": "2023-04",
+          "description": "Researched applications of NLP for low-resource African languages. Published 3 conference papers.",
+          "technologies": ["Python", "PyTorch", "Transformers"],
+          "Is Current": false
+        }
+      ],
+      "education": [
+        {
+          "institution": "Makerere University",
+          "degree": "Master's",
+          "Field of Study": "Artificial Intelligence",
+          "Start Year": 2018,
+          "End Year": 2020
+        },
+        {
+          "institution": "Makerere University",
+          "degree": "Bachelor's",
+          "Field of Study": "Computer Science",
+          "Start Year": 2014,
+          "End Year": 2018
+        }
+      ],
+      "certifications": [
+        { "name": "Deep Learning Specialization", "issuer": "Coursera (DeepLearning.AI)", "Issue Date": "2021-02" }
+      ],
+      "projects": [
+        {
+          "name": "LugandaBERT",
+          "description": "Open-source BERT model pre-trained on Luganda corpus.",
+          "technologies": ["Python", "PyTorch", "Transformers"],
+          "role": "Author",
+          "link": "https://github.com/example/lugandabert",
+          "Start Date": "2022-01",
+          "End Date": "2023-03"
+        }
+      ],
+      "availability": { "status": "Open to Opportunities", "type": "Full-time" },
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/jamesmukasa",
+        "github": "https://github.com/jamesmukasa"
+      }
+    }
+  ]
+}
