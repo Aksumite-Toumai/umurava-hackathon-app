@@ -5,6 +5,8 @@ import { CreateJob } from "@/app/ui/jobs/buttons";
 import { lusitana } from "@/app/ui/fonts";
 import { JobTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
+import { fetchResultPages } from "@/app/lib/data";
+import { auth } from "@/auth";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -12,10 +14,20 @@ export default async function Page(props: {
     page?: string;
   }>;
 }) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return (
+      <div className="mt-6 text-center text-stone-500">
+        Please log in to view your jobs.
+      </div>
+    );
+  }
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = 1;
+  const totalPages = await fetchResultPages(userId, query);
 
   return (
     <div className="w-full">
