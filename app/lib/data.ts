@@ -327,6 +327,47 @@ export async function fetchFilteredTalents(
   }
 }
 
+export async function fetchTalentById(id: string): Promise<CandidateDocument> {
+  try {
+    if (!ObjectId.isValid(id)) {
+      throw new Error("Invalid talent ID.");
+    }
+
+    const db = await getDb();
+    const talent = await db
+      .collection("candidates")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!talent) throw new Error("Talent not found.");
+
+    return {
+      _id: talent._id.toString(),
+      job_id: talent.job_id,
+      first_name: talent.first_name ?? "",
+      last_name: talent.last_name ?? "",
+      email: talent.email,
+      headline: talent.headline ?? "",
+      bio: talent.bio ?? null,
+      location: talent.location ?? "",
+      skills: talent.skills ?? [],
+      languages: talent.languages ?? null,
+      experience: talent.experience ?? [],
+      education: talent.education ?? [],
+      certifications: talent.certifications ?? null,
+      projects: talent.projects ?? [],
+      availability: talent.availability,
+      socialLinks: talent.socialLinks ?? null,
+      source: talent.source ?? "json",
+      raw_resume_text: talent.raw_resume_text ?? null,
+      screening: talent.screening ?? null,
+      created_at: talent.created_at,
+    };
+  } catch (error) {
+    console.error("Failed to fetch candidate:", error);
+    throw new Error("Error to fetch talent");
+  }
+}
+
 export async function fetchTopTalents(
   jobId: string,
 ): Promise<CandidateDocument[]> {
