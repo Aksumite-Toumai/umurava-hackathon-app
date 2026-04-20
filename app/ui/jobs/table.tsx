@@ -32,7 +32,7 @@ export default async function JobsTable({
     );
   }
 
-  const jobs = await fetchJobs(userId, (currentPage - 1) * 10, 10, query);
+  const jobs = await fetchJobs(userId, query, currentPage);
 
   return (
     <div className="mt-6 flow-root">

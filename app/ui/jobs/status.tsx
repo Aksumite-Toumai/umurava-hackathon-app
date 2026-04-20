@@ -25,13 +25,13 @@ export default function JobStatus({ status }: { status: string }) {
       ) : null}
       {status === "done" ? (
         <>
-          Paid
+          Screened
           <CheckIcon className="ml-1 w-4 text-white" />
         </>
       ) : null}
       {status === "error" ? (
         <>
-          Paid
+          Error
           <ExclamationCircleIcon className="ml-1 w-4 text-red" />
         </>
       ) : null}

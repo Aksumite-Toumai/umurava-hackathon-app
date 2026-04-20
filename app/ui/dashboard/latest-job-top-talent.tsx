@@ -3,13 +3,14 @@ import clsx from "clsx";
 import Image from "next/image";
 import { lusitana } from "@/app/ui/fonts";
 import { Talent } from "@/app/lib/definitions";
-
+import { ViewTalent } from "../talents/button";
 
 export default async function LatestTopTalents({
   talents,
 }: {
-  talents: Talent[];
+  talents: Record<string, any>[];
 }) {
+  console.log(talents);
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -30,15 +31,15 @@ export default async function LatestTopTalents({
               >
                 <div className="flex items-center">
                   <Image
-                    src={"talent"}
-                    alt={`${talent.first_name}'s profile picture`}
+                    src="/talent.png"
+                    alt={`${talent.name}'s profile picture`}
                     className="mr-4 rounded-full"
-                    width={32}
-                    height={32}
+                    width={24}
+                    height={24}
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold md:text-base">
-                      {talent.first_name}
+                      {talent.name}
                     </p>
                     <p className="hidden text-sm text-gray-500 sm:block">
                       {talent.email}
@@ -48,8 +49,9 @@ export default async function LatestTopTalents({
                 <p
                   className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
                 >
-                  {talent.rank}
+                  {talent.screening?.rank}
                 </p>
+                <ViewTalent id={talent.id} />
               </div>
             );
           })}

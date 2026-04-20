@@ -2,6 +2,16 @@ import { auth } from "@/auth";
 import { fetchResults } from "@/app/lib/data";
 import { ViewJob } from "@/app/ui/jobs/buttons";
 
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
 export default async function Table({
   query,
   currentPage,
@@ -20,12 +30,7 @@ export default async function Table({
     );
   }
 
-  const results = await fetchResults(
-    userId,
-    (currentPage - 1) * 10,
-    10,
-    query,
-  );
+  const results = await fetchResults(userId, query, currentPage);
 
   return (
     <div className="w-full">
@@ -60,7 +65,7 @@ export default async function Table({
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
-                      <p>{result.created_at}</p>
+                      <p>{formatDate(result.created_at)}</p>
                     </div>
                     <div className="flex justify-end gap-2">
                       <ViewJob id={result.job_id} />
@@ -106,7 +111,7 @@ export default async function Table({
                         {result.total_talent}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {result.created_at}
+                        {formatDate(result.created_at)}
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
