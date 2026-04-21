@@ -86,9 +86,12 @@ function fullName(c: Candidate): string {
 
 export default function TalentSidebar({
   candidates,
+  totalCount,
 }: {
   candidates: Candidate[];
+  totalCount?: number;
 }) {
+  const uploaded = totalCount ?? candidates.length;
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const screened = candidates
@@ -100,8 +103,8 @@ export default function TalentSidebar({
       <div className="rounded-xl border border-gray-100 bg-white p-6 text-center text-stone-500 shadow-sm">
         <UserCircleIcon className="mx-auto mb-2 h-8 w-8 text-gray-300" />
         <p className="text-sm">
-          {candidates.length > 0
-            ? `${candidates.length} candidate${candidates.length !== 1 ? "s" : ""} uploaded. Click "Screen Candidates" to run AI screening.`
+          {uploaded > 0
+            ? `${uploaded} candidate${uploaded !== 1 ? "s" : ""} uploaded. Click "Screen Candidates" to run AI screening.`
             : "No candidates yet. Upload a file when creating or editing the job."}
         </p>
       </div>

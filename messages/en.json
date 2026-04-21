@@ -85,6 +85,51 @@
     "score": "Score",
     "view_button": "View Talent"
   },
+  "ScreenButton": {
+    "top": "Top",
+    "label": "Screen Candidates",
+    "loading": "Screening..."
+  },
+  "UploadCandidates": {
+    "title": "Upload Candidates",
+    "drop_hint": "Drop files here or click to browse",
+    "supported": "PDF, CSV, XLSX, JSON supported",
+    "upload_button": "Upload {count} file",
+    "upload_button_plural": "Upload {count} files",
+    "uploading": "Uploading..."
+  },
+  "UploadHistory": {
+    "title": "Upload History",
+    "failed": "{count} failed",
+    "partial": "{count} partial"
+  },
+  "EmailCandidates": {
+    "button": "Email Candidates",
+    "cutoff_label": "Top",
+    "cutoff_suffix": "candidates accepted; the rest rejected.",
+    "tab_accepted": "Accepted",
+    "tab_rejected": "Rejected",
+    "recipients": "Recipients",
+    "subject": "Subject",
+    "body": "Body",
+    "preview_for": "Preview (for {email})",
+    "copy_emails": "Copy emails",
+    "download_csv": "Download CSV",
+    "open_mail": "Open in mail client"
+  },
+  "JobDetail": {
+    "experience_required": "Experience Required",
+    "key_skills": "Key Skills",
+    "date_posted": "Date Posted",
+    "detailed_requirements": "Detailed Requirements",
+    "back_to_jobs": "Back to Jobs",
+    "edit_job": "Edit Job",
+    "talent_upload_status": "Talent Upload Status",
+    "talents_uploaded": "{count} talents uploaded",
+    "not_screened": "not screened yet",
+    "screened_count": "{count} screened",
+    "no_candidates_uploaded": "No candidates uploaded yet."
+  },
   "Common": {
     "back": "Back",
     "edit": "Edit",

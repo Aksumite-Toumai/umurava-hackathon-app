@@ -3,6 +3,8 @@ import { ObjectId } from "mongodb";
 
 import { getDb } from "@/app/lib/db/mongodb";
 import { parseUploadedFile } from "@/app/lib/services/file-parser";
+import { upsertCandidates } from "@/app/lib/services/candidate-upsert";
+import { logUpload } from "@/app/lib/services/upload-log";
 
 const ALLOWED_EXTENSIONS = [".pdf", ".csv", ".xlsx", ".xls", ".json"];
 const MAX_UPLOAD_SIZE_MB = parseInt(process.env.MAX_UPLOAD_SIZE_MB || "10", 10);
@@ -11,8 +13,11 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  let job_id = "";
+  let filename = "unknown";
+
   try {
-    const { id: job_id } = await params;
+    ({ id: job_id } = await params);
 
     if (!ObjectId.isValid(job_id)) {
       return NextResponse.json(
@@ -22,6 +27,7 @@ export async function POST(
     }
 
     const db = await getDb();
+    const uploads = db.collection("uploads");
     const job = await db
       .collection("jobs")
       .findOne({ _id: new ObjectId(job_id) });
@@ -40,8 +46,20 @@ export async function POST(
       );
     }
 
+    filename = file.name;
     const ext = "." + (file.name.split(".").pop() || "").toLowerCase();
+
     if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      await logUpload(uploads, {
+        job_id,
+        filename,
+        file_type: ext.replace(".", "") || "unknown",
+        candidates_parsed: 0,
+        errors: [
+          `Unsupported file type '${ext}'. Allowed: ${ALLOWED_EXTENSIONS.join(", ")}`,
+        ],
+        status: "failed",
+      });
       return NextResponse.json(
         {
           detail: `Unsupported file type '${ext}'. Allowed: ${ALLOWED_EXTENSIONS.join(", ")}`,
@@ -52,6 +70,16 @@ export async function POST(
 
     const sizeMb = file.size / (1024 * 1024);
     if (sizeMb > MAX_UPLOAD_SIZE_MB) {
+      await logUpload(uploads, {
+        job_id,
+        filename,
+        file_type: ext.replace(".", ""),
+        candidates_parsed: 0,
+        errors: [
+          `File too large (${sizeMb.toFixed(1)}MB). Max: ${MAX_UPLOAD_SIZE_MB}MB`,
+        ],
+        status: "failed",
+      });
       return NextResponse.json(
         {
           detail: `File too large (${sizeMb.toFixed(1)}MB). Max: ${MAX_UPLOAD_SIZE_MB}MB`,
@@ -63,30 +91,41 @@ export async function POST(
     const result = await parseUploadedFile(file);
 
     const candidates = db.collection("candidates");
-    const created_at = new Date().toISOString();
+    const stats = await upsertCandidates(candidates, job_id, result.candidates);
 
-    const docs = result.candidates.map((c) => ({
+    const total = stats.inserted + stats.merged;
+    await logUpload(uploads, {
       job_id,
-      ...c.profile,
-      source: c.source,
-      raw_resume_text: c.raw_resume_text,
-      screening: null,
-      created_at,
-    }));
-
-    if (docs.length > 0) {
-      await candidates.insertMany(docs);
-    }
+      filename,
+      file_type: result.fileType,
+      candidates_parsed: total,
+      errors: result.errors,
+    });
 
     return NextResponse.json({
-      message: `Parsed and stored ${docs.length} candidates.`,
+      message: `Stored ${total} candidates (${stats.inserted} new, ${stats.merged} merged).`,
       filename: file.name,
       file_type: result.fileType,
-      candidates_parsed: docs.length,
+      candidates_parsed: total,
+      inserted: stats.inserted,
+      merged: stats.merged,
       errors: result.errors,
     });
   } catch (error) {
     console.error("Error uploading talents:", error);
+    try {
+      const db = await getDb();
+      await logUpload(db.collection("uploads"), {
+        job_id,
+        filename,
+        file_type: "unknown",
+        candidates_parsed: 0,
+        errors: [error instanceof Error ? error.message : "Unknown error"],
+        status: "failed",
+      });
+    } catch {
+      /* ignore logging failure */
+    }
     return NextResponse.json(
       { detail: "Failed to process upload" },
       { status: 500 },
