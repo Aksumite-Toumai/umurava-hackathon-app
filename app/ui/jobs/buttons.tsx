@@ -7,6 +7,7 @@ import {
 import Link from "next/link";
 import { deleteJobAction } from "@/app/lib/actions";
 import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 export async function CreateJob() {
   const t = await getTranslations("JobsPage");
@@ -39,7 +40,14 @@ export async function DeleteJob({ id }: { id: string }) {
   const deleteJobWithId = deleteJobAction.bind(null, id);
 
   return (
-    <form action={deleteJobWithId}>
+    <form
+      action={deleteJobWithId}
+      onSubmit={(e) => {
+        if (!window.confirm(t("confirm_delete"))) {
+          e.preventDefault();
+        }
+      }}
+    >
       <button
         type="submit"
         className="rounded-md border p-2 text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors"

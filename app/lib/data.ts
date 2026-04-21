@@ -5,7 +5,7 @@ import type { JobDocument } from "@/app/lib/schemas/job";
 import type { CandidateDocument } from "@/app/lib/schemas/candidate";
 import { unstable_noStore as noStore } from "next/cache";
 
-const TABLE_ITEMS_PER_PAGE = 10;
+const TABLE_ITEMS_PER_PAGE = 6;
 
 export async function fetchDashboardStats(userId: string) {
   noStore();
@@ -530,32 +530,189 @@ export async function fetchResults(
   }
 }
 
-export async function fetchResultPages(
+// Fetch Jobs for the Dropdown Filter
+export async function fetchJobsForFilter(userId: string) {
+  try {
+    const db = await getDb();
+    const jobs = await db
+      .collection("jobs")
+      .find({ user_id: userId, status: "done" })
+      .project({ _id: 1, role: 1 })
+      .sort({ created_at: -1 })
+      .toArray();
+
+    return jobs.map((j) => ({
+      _id: j._id.toString(),
+      role: j.role,
+    }));
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch jobs for filter.");
+  }
+}
+
+// Fetch Screened Candidates (The Table Data)
+export async function fetchScreenedCandidates(
   userId: string,
   query: string,
-): Promise<number> {
+  currentPage: number,
+  jobId: string,
+): Promise<(CandidateDocument & { job_title: string })[]> {
+  const skip = (currentPage - 1) * TABLE_ITEMS_PER_PAGE;
+
   try {
     const db = await getDb();
 
-    const search_filter: any = {
-      user_id: userId,
-      status: "done",
+    // Get the user's jobs first
+    const userJobsFilter: any = { user_id: userId };
+    if (jobId) {
+      userJobsFilter._id = new ObjectId(jobId);
+    }
+
+    const userJobs = await db.collection("jobs").find(userJobsFilter).toArray();
+    if (userJobs.length === 0) return [];
+
+    let validJobIds = userJobs.map((j) => j._id.toString());
+
+    // Create a map of Job ID -> Job Role for the table display
+    const jobTitleMap = userJobs.reduce(
+      (acc, job) => {
+        acc[job._id.toString()] = job.role;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+
+    const matchQuery: any = {
+      job_id: { $in: validJobIds },
+      screening: { $exists: true, $ne: null },
+    };
+
+    // Build the Advanced Omni-Search
+    if (query) {
+      const orConditions: any[] = [
+        { first_name: { $regex: query, $options: "i" } },
+        { last_name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+        { "screening.strengths": { $regex: query, $options: "i" } },
+      ];
+
+      // If the user typed a number, search Rank and Score
+      const numQuery = parseInt(query, 10);
+      if (!isNaN(numQuery)) {
+        orConditions.push({ "screening.rank": numQuery });
+        orConditions.push({ "screening.final_score": numQuery });
+      }
+
+      // Search by Job Title
+      // Find any jobs where the role matches the search text
+      const matchingJobIds = userJobs
+        .filter((j) => j.role.toLowerCase().includes(query.toLowerCase()))
+        .map((j) => j._id.toString());
+
+      if (matchingJobIds.length > 0) {
+        orConditions.push({ job_id: { $in: matchingJobIds } });
+      }
+
+      matchQuery.$or = orConditions;
+    }
+
+    const candidates = await db
+      .collection("candidates")
+      .find(matchQuery)
+      .sort({ "screening.rank": 1 })
+      .skip(skip)
+      .limit(TABLE_ITEMS_PER_PAGE)
+      .toArray();
+
+    // the returned data
+    return candidates.map((c) => ({
+      _id: c._id.toString(),
+      job_id: c.job_id,
+      first_name: c.first_name ?? "",
+      last_name: c.last_name ?? "",
+      email: c.email,
+      headline: c.headline ?? "",
+      bio: c.bio ?? null,
+      location: c.location ?? "",
+      skills: c.skills ?? [],
+      languages: c.languages ?? null,
+      experience: c.experience ?? [],
+      education: c.education ?? [],
+      certifications: c.certifications ?? null,
+      projects: c.projects ?? [],
+      availability: c.availability,
+      socialLinks: c.socialLinks ?? null,
+      source: c.source ?? "json",
+      raw_resume_text: c.raw_resume_text ?? null,
+      screening: c.screening ?? null,
+      created_at: c.created_at,
+
+      job_title: jobTitleMap[c.job_id] || "Unknown Job",
+    }));
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch AI screened candidates.");
+  }
+}
+
+export async function fetchResultPages(
+  userId: string,
+  query: string,
+  jobId?: string,
+): Promise<{ totalPages: number; totalCount: number }> {
+  try {
+    const db = await getDb();
+
+    const userJobsFilter: any = { user_id: userId };
+    if (jobId) {
+      userJobsFilter._id = new ObjectId(jobId);
+    }
+    const userJobs = await db.collection("jobs").find(userJobsFilter).toArray();
+
+    // If user has no jobs, return 0 for both
+    if (userJobs.length === 0) return { totalPages: 0, totalCount: 0 };
+
+    const validJobIds = userJobs.map((j) => j._id.toString());
+
+    const matchQuery: any = {
+      job_id: { $in: validJobIds },
+      screening: { $exists: true, $ne: null },
     };
 
     if (query) {
-      search_filter["$or"] = [
-        { role: { $regex: query, $options: "i" } },
-        { company: { $regex: query, $options: "i" } },
+      const orConditions: any[] = [
+        { first_name: { $regex: query, $options: "i" } },
+        { last_name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+        { "screening.strengths": { $regex: query, $options: "i" } },
       ];
+
+      const numQuery = parseInt(query, 10);
+      if (!isNaN(numQuery)) {
+        orConditions.push({ "screening.rank": numQuery });
+        orConditions.push({ "screening.final_score": numQuery });
+      }
+
+      const matchingJobIds = userJobs
+        .filter((j) => j.role.toLowerCase().includes(query.toLowerCase()))
+        .map((j) => j._id.toString());
+
+      if (matchingJobIds.length > 0) {
+        orConditions.push({ job_id: { $in: matchingJobIds } });
+      }
+
+      matchQuery.$or = orConditions;
     }
 
-    const count = await db.collection("jobs").countDocuments(search_filter);
+    const count = await db.collection("candidates").countDocuments(matchQuery);
 
-    const totalPages = Math.ceil(count / TABLE_ITEMS_PER_PAGE);
-
-    return totalPages;
+    return {
+      totalPages: Math.ceil(count / TABLE_ITEMS_PER_PAGE),
+      totalCount: count,
+    };
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch total number of screened results.");
+    throw new Error("Failed to fetch total number of screened results pages.");
   }
 }

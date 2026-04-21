@@ -29,11 +29,12 @@ import Table from "@/app/ui/jobs/talent-table";
 import { lusitana } from "@/app/ui/fonts";
 import { JobTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
+import { getTranslations, getLocale } from "next-intl/server";
 
-const formatDate = (dateString?: string) => {
+const formatDate = (dateString?: string, locale: string = "en-US") => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(locale, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -53,6 +54,9 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchTalentPages(id, query);
 
+  const t = await getTranslations("JobDetailsPage");
+  const locale = await getLocale();
+
   let job, candidates, counts, uploads;
   [job, candidates, counts, uploads] = await Promise.all([
     fetchJobById(id),
@@ -71,9 +75,9 @@ export default async function Page(props: {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: "Jobs", href: "/dashboard/jobs" },
+          { label: t("breadcrumbs_jobs"), href: "/dashboard/jobs" },
           {
-            label: "View Job",
+            label: t("breadcrumbs_view_job"),
             href: `/dashboard/jobs/${id}`,
             active: true,
           },
@@ -104,53 +108,54 @@ export default async function Page(props: {
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-medium text-stone-500 mb-2">
                   <ClockIcon className="h-5 w-5" />
-                  Experience Required
+                  {t("experience_required")}
                 </div>
                 <p className="text-stone-900 font-medium">
-                  {job.experience || "Not specified"}
+                  {job.experience || t("not_specified")}
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-medium text-stone-500 mb-2">
                   <WrenchScrewdriverIcon className="h-5 w-5" />
-                  Key Skills
+                  {t("key_skills")}
                 </div>
                 <p className="text-stone-900 font-medium">
-                  {job.skills || "Not specified"}
+                  {job.skills || t("not_specified")}
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-medium text-stone-500 mb-2">
                   <CalendarIcon className="h-5 w-5" />
-                  Date Posted
+                  {t("date_posted")}
                 </div>
                 <p className="text-stone-900 font-medium">
-                  {formatDate(job.created_at)}
+                  {formatDate(job.created_at, locale)}{" "}
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-medium text-stone-500 mb-2">
                   <DocumentArrowUpIcon className="h-5 w-5" />
-                  Talent Upload Status
+                  {t("upload_status")}
                 </div>
                 {/* Candidate count */}
                 {counts.total > 0 ? (
                   <div className="px-3 pb-3">
                     <p className="text-sm text-amber-800">
-                      {counts.total} talent
-                      {counts.total !== 1 ? "s" : ""} uploaded
+                      {counts.total === 1
+                        ? t("talent_uploaded_singular", { count: counts.total })
+                        : t("talent_uploaded_plural", { count: counts.total })}
                       {counts.screened > 0
-                        ? ` · ${counts.screened} screened`
-                        : " · not screened yet"}
+                        ? ` · ${t("screened_count", { count: counts.screened })}`
+                        : ` · ${t("not_screened")}`}
                     </p>
                   </div>
                 ) : (
                   <div className="px-3 pb-3">
                     <p className="text-sm text-stone-500">
-                      No candidates uploaded yet.
+                      {t("no_candidates")}
                     </p>
                   </div>
                 )}
@@ -160,7 +165,7 @@ export default async function Page(props: {
             {job.requirements && (
               <div className="border-t border-gray-100 p-6 md:p-8">
                 <h2 className="text-lg font-bold text-stone-900 mb-4">
-                  Detailed Requirements
+                  {t("detailed_requirements")}
                 </h2>
                 <div className="prose prose-stone max-w-none text-stone-600 whitespace-pre-wrap">
                   {job.requirements}
@@ -175,7 +180,7 @@ export default async function Page(props: {
               href="/dashboard/jobs"
               className="flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors"
             >
-              <ArrowLeftIcon className="h-4 w-4" /> Back to Jobs
+              <ArrowLeftIcon className="h-4 w-4" /> {t("back_to_jobs")}
             </Link>
 
             <div className="flex items-center gap-3">
@@ -185,17 +190,19 @@ export default async function Page(props: {
                 href={`/dashboard/jobs/${id}/edit`}
                 className="flex h-10 items-center gap-2 rounded-lg bg-amber-700 px-4 text-sm font-medium text-white transition-colors hover:bg-amber-800"
               >
-                <PencilIcon className="h-4 w-4" /> Edit Job
+                <PencilIcon className="h-4 w-4" /> {t("edit_job")}
               </Link>
             </div>
           </div>
 
           <div className="w-full mt-8">
             <div className="flex w-full items-center justify-between">
-              <h1 className={`${lusitana.className} text-2xl`}>Talents</h1>
+              <h1 className={`${lusitana.className} text-2xl`}>
+                {t("talents_title")}
+              </h1>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-              <Search placeholder="Search talent..." />
+              <Search placeholder={t("search_placeholder")} />
             </div>
             <Suspense key={query + currentPage} fallback={<JobTableSkeleton />}>
               <Table job_id={id} query={query} currentPage={currentPage} />
@@ -209,7 +216,7 @@ export default async function Page(props: {
         <div className="lg:col-span-1 space-y-6">
           <UploadCandidates jobId={id} />
           <UploadHistory uploads={uploads} />
-          <TalentSidebar candidates={candidates} totalCount={counts.total} />
+          <TalentSidebar candidates={candidates} />
         </div>
       </div>
     </main>

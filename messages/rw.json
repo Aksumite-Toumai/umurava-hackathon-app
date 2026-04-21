@@ -75,7 +75,8 @@
     "actions": {
       "view": "Reba",
       "edit": "Hindura",
-      "delete": "Siba"
+      "delete": "Siba",
+      "confirm_delete": "Wizeye neza ko ushaka gusiba uyu mwanya w'akazi? Ibi ntibishobora gusubirwaho."
     }
   },
   "TalentSidebar": {
@@ -130,10 +131,48 @@
     "screened_count": "{count} basuzumwe",
     "no_candidates_uploaded": "Nta bakandida barashyizwemo."
   },
+  "JobDetailsPage": {
+    "breadcrumbs_jobs": "Akazi",
+    "breadcrumbs_view_job": "Reba Akazi",
+    "experience_required": "Uburambe busabwa",
+    "key_skills": "Ubumenyi bw'ingenzi",
+    "date_posted": "Itariki yashyizweho",
+    "upload_status": "Imiterere ya dosiye",
+    "not_specified": "Ntibyavuzwe",
+    "detailed_requirements": "Ibisabwa mu buryo burambuye",
+    "back_to_jobs": "Subira ku Kazi",
+    "edit_job": "Hindura Akazi",
+    "talents_title": "Abakandida",
+    "search_placeholder": "Shakisha abakandida...",
+    "no_candidates": "Nta bakandida barashyirwamo.",
+    "talent_uploaded_singular": "Umukandida {count} yashyizwemo",
+    "talent_uploaded_plural": "Abakandida {count} bashyizwemo",
+    "screened_count": "{count} basuzumwe",
+    "not_screened": "ntibarasuzumwa"
+  },
   "Common": {
     "back": "Subira Inyuma",
     "edit": "Hindura",
     "email": "Ohereza Imeyili",
     "search": "Shakisha..."
+  },
+  "ResultsPage": {
+    "title": "Ibyavuye mu Isuzuma rya AI",
+    "please_log_in": "Nyamuneka injira kugira ngo urebe ibyavuyemo.",
+    "search_placeholder": "Shakisha abakandida basuzumwe...",
+    "filter_by_job": "Sarura ukurikije akazi",
+    "all_jobs": "Akazi kose",
+    "no_results": "Nta bakandida basuzumwe babonetse.",
+    "view_report": "Reba raporo yose",
+    "email_candidate": "Ohereza Imeyili",
+    "total_candidates_label": "Abakandida",
+    "headers": {
+      "candidate": "Umukandida",
+      "job": "Akazi",
+      "rank": "Urwego AI",
+      "score": "Amanota AI",
+      "key_strength": "Ubumenyi bw'ingenzi",
+      "actions": "Ibyo gukora"
+    }
   }
 }

@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  UserIcon,
-  Cog8ToothIcon,
-  ArrowRightStartOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+import { UserIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 
 export default function UserMenu({
   username,
@@ -44,10 +40,9 @@ export default function UserMenu({
               href="#"
               className="flex items-center px-4 py-2 text-sm text-stone-700 hover:bg-parchment hover:text-amber-900"
             >
-              <Cog8ToothIcon className="w-4 h-4 mr-3" />
+              <EnvelopeIcon className="w-4 h-4 mr-3" />
               {email}
             </a>
-            <hr className="my-1 border-stone-200" />
           </div>
         </>
       )}

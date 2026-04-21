@@ -1,142 +1,153 @@
 import { auth } from "@/auth";
-import { fetchResults } from "@/app/lib/data";
-import { ViewJob } from "@/app/ui/jobs/buttons";
+import { fetchScreenedCandidates } from "@/app/lib/data";
+import { getTranslations } from "next-intl/server";
+import {
+  EyeIcon,
+  EnvelopeIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
 
-const formatDate = (dateString?: string) => {
-  if (!dateString) return "N/A";
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  }).format(date);
-};
-
-export default async function Table({
+export default async function ResultsTable({
   query,
   currentPage,
+  jobId,
 }: {
   query: string;
   currentPage: number;
+  jobId: string;
 }) {
   const session = await auth();
   const userId = session?.user?.id;
+  const t = await getTranslations("ResultsPage");
 
-  if (!userId) {
-    return (
-      <div className="mt-6 text-center text-stone-500">
-        Please log in to view your jobs.
-      </div>
-    );
-  }
+  if (!userId) return null;
 
-  const results = await fetchResults(userId, query, currentPage);
+  // Fetch only candidates who have a screening object attached
+  const candidates = await fetchScreenedCandidates(
+    userId,
+    query,
+    currentPage,
+    jobId,
+  );
 
   return (
-    <div className="w-full">
-      <div className="mt-6 flow-root">
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
-              <div className="md:hidden">
-                {results?.map((result) => (
-                  <div
-                    key={result.job_id}
-                    className="mb-2 w-full rounded-md bg-white p-4"
+    <div className="mt-6 flow-root">
+      <div className="inline-block min-w-full align-middle">
+        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+          <table className="min-w-full text-stone-900 md:table">
+            <thead className="rounded-lg text-left text-sm font-normal">
+              <tr>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  {t("headers.candidate")}
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-5 font-medium hidden md:table-cell"
+                >
+                  {t("headers.job")}
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  {t("headers.rank")}
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  {t("headers.score")}
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-5 font-medium hidden lg:table-cell"
+                >
+                  {t("headers.key_strength")}
+                </th>
+                <th scope="col" className="relative py-3 pl-6 pr-3">
+                  <span className="sr-only">{t("headers.actions")}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {candidates?.map((candidate) => {
+                const s = candidate.screening;
+                if (!s) return null;
+
+                // Determine score color badge
+                const isHigh = s.final_score >= 85;
+                const isMed = s.final_score >= 70 && s.final_score < 85;
+
+                return (
+                  <tr
+                    key={candidate._id}
+                    className="w-full border-b py-3 text-sm last-of-type:border-none hover:bg-stone-50 transition-colors"
                   >
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <p className="font-medium text-amber-700">
-                          {result.role}
-                        </p>
-                        <p className="text-sm text-stone-600">
-                          {result.company}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex w-full items-center justify-between border-b py-5">
-                      <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Status</p>
-                        <p className="font-medium">{result.status}</p>
-                      </div>
-                      <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Candidates</p>
-                        <p className="font-medium">{result.total_talent}</p>
-                      </div>
-                    </div>
-                    <div className="pt-4 text-sm">
-                      <p>{formatDate(result.created_at)}</p>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <ViewJob id={result.job_id} />
-                    </div>
-                  </div>
-                ))}
+                    {/* Candidate Info */}
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <p className="font-semibold text-stone-900">
+                        {candidate.first_name} {candidate.last_name}
+                      </p>
+                      <p className="text-xs text-stone-500">
+                        {candidate.email}
+                      </p>
+                    </td>
 
-                {results.length === 0 && (
-                  <p className="mt-4 text-gray-400">No result found.</p>
-                )}
-              </div>
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
-                <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
-                  <tr>
-                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                      Job Role
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Company
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Number of Talents
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Date
-                    </th>
-                    <th scope="col" className="relative py-3 pl-6 pr-3">
-                      <span className="sr-only">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
+                    {/* Job Applied For (Requires joining the job data or passing job_title from DB) */}
+                    <td className="whitespace-nowrap px-3 py-3 text-stone-600 hidden md:table-cell">
+                      {candidate.job_title || "Unknown Job"}
+                    </td>
 
-                <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {results.map((result) => (
-                    <tr key={result.job_id} className="group">
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {result.role}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {result.company}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {result.total_talent}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {formatDate(result.created_at)}
-                      </td>
-                      <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end gap-3">
-                          <ViewJob id={result.job_id} />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                    {/* AI Rank */}
+                    <td className="whitespace-nowrap px-3 py-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-800 ring-1 ring-amber-200">
+                        #{s.rank}
+                      </span>
+                    </td>
 
-                  {results.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={6}
-                        className="py-10 text-center text-stone-500"
+                    {/* AI Score Badge */}
+                    <td className="whitespace-nowrap px-3 py-3 font-medium">
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-bold ring-1 ring-inset ${
+                          isHigh
+                            ? "bg-green-50 text-green-700 ring-green-600/20"
+                            : isMed
+                              ? "bg-yellow-50 text-yellow-800 ring-yellow-600/20"
+                              : "bg-red-50 text-red-700 ring-red-600/10"
+                        }`}
                       >
-                        <span className="mt-4 text-gray-400">
-                          No results found.
-                        </span>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                        <SparklesIcon className="h-3 w-3" />
+                        {s.final_score}/100
+                      </span>
+                    </td>
+
+                    {/* Key Strength Snippet */}
+                    <td className="px-3 py-3 text-stone-600 hidden lg:table-cell max-w-[250px] truncate text-xs">
+                      {s.strengths[0] || "No data"}
+                    </td>
+
+                    {/* Actions */}
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-2">
+                        <Link
+                          href={`/dashboard/jobs/talent/${candidate._id}`}
+                          className="rounded-md border p-2 text-stone-600 hover:bg-amber-100 hover:text-amber-700 transition-colors"
+                          title={t("view_report")}
+                        >
+                          <EyeIcon className="w-5" />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+
+              {candidates?.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-10 text-center text-stone-500">
+                    <span className="mt-4 text-gray-400">
+                      {t("no_results")}
+                    </span>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
