@@ -75,7 +75,8 @@
     "actions": {
       "view": "View",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "confirm_delete": "Are you sure you want to delete this job? This action cannot be undone."
     }
   },
   "TalentSidebar": {
@@ -130,10 +131,48 @@
     "screened_count": "{count} screened",
     "no_candidates_uploaded": "No candidates uploaded yet."
   },
+  "JobDetailsPage": {
+    "breadcrumbs_jobs": "Jobs",
+    "breadcrumbs_view_job": "View Job",
+    "experience_required": "Experience Required",
+    "key_skills": "Key Skills",
+    "date_posted": "Date Posted",
+    "upload_status": "Talent Upload Status",
+    "not_specified": "Not specified",
+    "detailed_requirements": "Detailed Requirements",
+    "back_to_jobs": "Back to Jobs",
+    "edit_job": "Edit Job",
+    "talents_title": "Talents",
+    "search_placeholder": "Search talent...",
+    "no_candidates": "No candidates uploaded yet.",
+    "talent_uploaded_singular": "{count} talent uploaded",
+    "talent_uploaded_plural": "{count} talents uploaded",
+    "screened_count": "{count} screened",
+    "not_screened": "not screened yet"
+  },
   "Common": {
     "back": "Back",
     "edit": "Edit",
     "email": "Email Profile",
     "search": "Search..."
+  },
+  "ResultsPage": {
+    "title": "AI Screening Results",
+    "please_log_in": "Please log in to view results.",
+    "search_placeholder": "Search screened candidates...",
+    "filter_by_job": "Filter by job",
+    "all_jobs": "All Active Jobs",
+    "no_results": "No screened candidates found matching your criteria.",
+    "view_report": "View Full Report",
+    "email_candidate": "Email Candidate",
+    "total_candidates_label": "Candidates",
+    "headers": {
+      "candidate": "Candidate",
+      "job": "Job Applied For",
+      "rank": "AI Rank",
+      "score": "AI Score",
+      "key_strength": "Key Strength",
+      "actions": "Actions"
+    }
   }
 }

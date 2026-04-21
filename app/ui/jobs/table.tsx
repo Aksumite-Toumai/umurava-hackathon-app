@@ -1,4 +1,5 @@
-import { UpdateJob, DeleteJob, ViewJob } from "@/app/ui/jobs/buttons";
+import { UpdateJob, ViewJob } from "@/app/ui/jobs/buttons";
+import { DeleteJob } from "@/app/ui/jobs/delete-button";
 import { auth } from "@/auth";
 import { fetchJobs } from "@/app/lib/data";
 import JobStatus from "./status";

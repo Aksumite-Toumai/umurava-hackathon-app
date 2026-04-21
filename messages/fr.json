@@ -75,7 +75,8 @@
     "actions": {
       "view": "Voir",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "confirm_delete": "Êtes-vous sûr de vouloir supprimer cet emploi ? Cette action est irréversible."
     }
   },
   "TalentSidebar": {
@@ -130,10 +131,48 @@
     "screened_count": "{count} évalués",
     "no_candidates_uploaded": "Aucun candidat téléversé pour le moment."
   },
+  "JobDetailsPage": {
+    "breadcrumbs_jobs": "Emplois",
+    "breadcrumbs_view_job": "Voir l'emploi",
+    "experience_required": "Expérience requise",
+    "key_skills": "Compétences clés",
+    "date_posted": "Date de publication",
+    "upload_status": "Statut de téléchargement des talents",
+    "not_specified": "Non spécifié",
+    "detailed_requirements": "Exigences détaillées",
+    "back_to_jobs": "Retour aux emplois",
+    "edit_job": "Modifier l'emploi",
+    "talents_title": "Talents",
+    "search_placeholder": "Rechercher des talents...",
+    "no_candidates": "Aucun candidat téléchargé pour le moment.",
+    "talent_uploaded_singular": "{count} talent téléchargé",
+    "talent_uploaded_plural": "{count} talents téléchargés",
+    "screened_count": "{count} évalué(s)",
+    "not_screened": "non évalué pour le moment"
+  },
   "Common": {
     "back": "Retour",
     "edit": "Modifier",
     "email": "Envoyer un e-mail",
     "search": "Rechercher..."
+  },
+  "ResultsPage": {
+    "title": "Résultats de l'évaluation IA",
+    "please_log_in": "Veuillez vous connecter pour voir les résultats.",
+    "search_placeholder": "Rechercher des candidats évalués...",
+    "filter_by_job": "Filtrer par emploi",
+    "all_jobs": "Tous les emplois actifs",
+    "no_results": "Aucun candidat évalué ne correspond à vos critères.",
+    "view_report": "Voir le rapport complet",
+    "email_candidate": "Envoyer un e-mail au candidat",
+    "total_candidates_label": "Candidats",
+    "headers": {
+      "candidate": "Candidat",
+      "job": "Emploi postulé",
+      "rank": "Rang IA",
+      "score": "Score IA",
+      "key_strength": "Atout principal",
+      "actions": "Actions"
+    }
   }
 }
