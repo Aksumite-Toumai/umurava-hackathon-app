@@ -1,7 +1,9 @@
 import {
   fetchJobById,
   fetchCandidates,
+  fetchCandidateCounts,
   fetchTalentPages,
+  fetchUploadHistory,
 } from "@/app/lib/data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -18,7 +20,9 @@ import {
 } from "@heroicons/react/24/outline";
 import TalentSidebar from "@/app/ui/jobs/talent-sidebar";
 import ScreenButton from "@/app/ui/jobs/screen-button";
+import EmailCandidates from "@/app/ui/jobs/email-candidates";
 import UploadCandidates from "@/app/ui/jobs/upload-candidates";
+import UploadHistory from "@/app/ui/jobs/upload-history";
 import Pagination from "@/app/ui/jobs/pagination";
 import Search from "@/app/ui/search";
 import Table from "@/app/ui/jobs/talent-table";
@@ -49,19 +53,19 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchTalentPages(id, query);
 
-  let job, candidates;
-  [job, candidates] = await Promise.all([
+  let job, candidates, counts, uploads;
+  [job, candidates, counts, uploads] = await Promise.all([
     fetchJobById(id),
     fetchCandidates(id, 3),
+    fetchCandidateCounts(id),
+    fetchUploadHistory(id),
   ]);
 
   if (!job) {
     notFound();
   }
 
-  const hasScreened = candidates.some(
-    (c: any) => c.screening && c.screening.rank,
-  );
+  const hasScreened = counts.screened > 0;
 
   return (
     <main>
@@ -133,14 +137,20 @@ export default async function Page(props: {
                   Talent Upload Status
                 </div>
                 {/* Candidate count */}
-                {candidates.length > 0 && (
+                {counts.total > 0 ? (
                   <div className="px-3 pb-3">
                     <p className="text-sm text-amber-800">
-                      {candidates.length} talent
-                      {candidates.length !== 1 ? "s" : ""} uploaded
-                      {hasScreened
-                        ? ": screening complete"
-                        : ": not screened yet"}
+                      {counts.total} talent
+                      {counts.total !== 1 ? "s" : ""} uploaded
+                      {counts.screened > 0
+                        ? ` · ${counts.screened} screened`
+                        : " · not screened yet"}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="px-3 pb-3">
+                    <p className="text-sm text-stone-500">
+                      No candidates uploaded yet.
                     </p>
                   </div>
                 )}
@@ -170,6 +180,7 @@ export default async function Page(props: {
 
             <div className="flex items-center gap-3">
               <ScreenButton jobId={id} />
+              {hasScreened && <EmailCandidates jobId={id} />}
               <Link
                 href={`/dashboard/jobs/${id}/edit`}
                 className="flex h-10 items-center gap-2 rounded-lg bg-amber-700 px-4 text-sm font-medium text-white transition-colors hover:bg-amber-800"
@@ -197,7 +208,8 @@ export default async function Page(props: {
 
         <div className="lg:col-span-1 space-y-6">
           <UploadCandidates jobId={id} />
-          <TalentSidebar candidates={candidates} />
+          <UploadHistory uploads={uploads} />
+          <TalentSidebar candidates={candidates} totalCount={counts.total} />
         </div>
       </div>
     </main>

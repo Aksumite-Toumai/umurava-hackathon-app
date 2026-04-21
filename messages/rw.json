@@ -85,6 +85,51 @@
     "score": "Amanota",
     "view_button": "Reba Umukandida"
   },
+  "ScreenButton": {
+    "top": "Top",
+    "label": "Suzuma Abakandida",
+    "loading": "Birasuzumwa..."
+  },
+  "UploadCandidates": {
+    "title": "Shyiramo Abakandida",
+    "drop_hint": "Shyira dosiye hano cyangwa kanda ushakishe",
+    "supported": "PDF, CSV, XLSX, JSON biremewe",
+    "upload_button": "Shyiramo dosiye {count}",
+    "upload_button_plural": "Shyiramo dosiye {count}",
+    "uploading": "Birashyirwamo..."
+  },
+  "UploadHistory": {
+    "title": "Amateka yo Gushyiramo",
+    "failed": "{count} byanze",
+    "partial": "{count} bike"
+  },
+  "EmailCandidates": {
+    "button": "Ohereza Abakandida Imeyili",
+    "cutoff_label": "Top",
+    "cutoff_suffix": "bakandida bemerewe; abandi banze.",
+    "tab_accepted": "Bemerewe",
+    "tab_rejected": "Banze",
+    "recipients": "Abaherwa",
+    "subject": "Ingingo",
+    "body": "Ubutumwa",
+    "preview_for": "Icyerekezo (kuri {email})",
+    "copy_emails": "Koporora imeyili",
+    "download_csv": "Manura CSV",
+    "open_mail": "Fungura muri imeyili"
+  },
+  "JobDetail": {
+    "experience_required": "Uburambe Busabwa",
+    "key_skills": "Ubumenyi Ngombwa",
+    "date_posted": "Itariki y'Itangazwa",
+    "detailed_requirements": "Ibisabwa Birambuye",
+    "back_to_jobs": "Subira ku Kazi",
+    "edit_job": "Hindura Akazi",
+    "talent_upload_status": "Uko Byashyizwemo",
+    "talents_uploaded": "{count} bakandida bashyizwemo",
+    "not_screened": "ntibarasuzumwa",
+    "screened_count": "{count} basuzumwe",
+    "no_candidates_uploaded": "Nta bakandida barashyizwemo."
+  },
   "Common": {
     "back": "Subira Inyuma",
     "edit": "Hindura",

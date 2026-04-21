@@ -41,6 +41,19 @@ const COLUMN_MAP: Record<string, string> = {
   skills: "skills",
   "technical skills": "skills",
   competencies: "skills",
+
+  // Resume / CV link
+  cv: "resume_url",
+  resume: "resume_url",
+  "cv url": "resume_url",
+  cv_url: "resume_url",
+  "resume url": "resume_url",
+  resume_url: "resume_url",
+  "cv link": "resume_url",
+  cv_link: "resume_url",
+  "resume link": "resume_url",
+  resume_link: "resume_url",
+  link: "resume_url",
 };
 
 export function parseCsv(
@@ -111,8 +124,13 @@ function rowsToCandidates(
 
   rows.forEach((row, idx) => {
     try {
-      const profile = rowToProfile(row, fieldMap);
-      candidates.push({ profile, source, raw_resume_text: null });
+      const { profile, resume_url } = rowToProfile(row, fieldMap);
+      candidates.push({
+        profile,
+        source,
+        raw_resume_text: null,
+        resume_url: resume_url ?? null,
+      });
     } catch (e) {
       errors.push(
         `Row ${idx + 2}: ${e instanceof Error ? e.message : "unknown"}`,
@@ -137,7 +155,7 @@ function mapColumns(columns: string[]): Record<string, string> {
 function rowToProfile(
   row: Record<string, string>,
   fieldMap: Record<string, string>,
-): TalentProfile {
+): { profile: TalentProfile; resume_url: string | null } {
   const raw: Record<string, string> = {};
 
   for (const [col, field] of Object.entries(fieldMap)) {
@@ -169,19 +187,22 @@ function rowToProfile(
     }));
 
   return {
-    first_name,
-    last_name,
-    email,
-    headline: raw.headline ?? "",
-    bio: raw.bio ?? null,
-    location: raw.location ?? "",
-    skills,
-    languages: null,
-    experience: [],
-    education: [],
-    certifications: null,
-    projects: [],
-    availability: undefined,
-    socialLinks: null,
+    profile: {
+      first_name,
+      last_name,
+      email,
+      headline: raw.headline ?? "",
+      bio: raw.bio ?? null,
+      location: raw.location ?? "",
+      skills,
+      languages: null,
+      experience: [],
+      education: [],
+      certifications: null,
+      projects: [],
+      availability: undefined,
+      socialLinks: null,
+    },
+    resume_url: raw.resume_url || null,
   };
 }

@@ -291,12 +291,24 @@ export async function fetchFilteredTalents(
       ];
     }
 
+    // Sort: ranked candidates first (by rank asc), unranked last.
     const results = await db
       .collection("candidates")
-      .find(search_filter)
-      .sort({ "screening.rank": 1 })
-      .skip(skip)
-      .limit(TABLE_ITEMS_PER_PAGE)
+      .aggregate([
+        { $match: search_filter },
+        {
+          $addFields: {
+            _has_rank: {
+              $cond: [{ $ifNull: ["$screening.rank", false] }, 0, 1],
+            },
+            _rank: { $ifNull: ["$screening.rank", 999999] },
+          },
+        },
+        { $sort: { _has_rank: 1, _rank: 1 } },
+        { $project: { _has_rank: 0, _rank: 0 } },
+        { $skip: skip },
+        { $limit: TABLE_ITEMS_PER_PAGE },
+      ])
       .toArray();
 
     return results.map((c) => ({
@@ -372,6 +384,63 @@ export async function fetchTopTalents(
   jobId: string,
 ): Promise<CandidateDocument[]> {
   return fetchCandidates(jobId, 3);
+}
+
+export type UploadRecord = {
+  _id: string;
+  filename: string;
+  file_type: string;
+  status: "success" | "partial" | "failed";
+  candidates_parsed: number;
+  errors: string[];
+  uploaded_at: string;
+};
+
+export async function fetchUploadHistory(
+  jobId: string,
+  limit: number = 20,
+): Promise<UploadRecord[]> {
+  try {
+    const db = await getDb();
+    const rows = await db
+      .collection("uploads")
+      .find({ job_id: jobId })
+      .sort({ uploaded_at: -1 })
+      .limit(limit)
+      .toArray();
+
+    return rows.map((r) => ({
+      _id: r._id.toString(),
+      filename: r.filename,
+      file_type: r.file_type,
+      status: r.status,
+      candidates_parsed: r.candidates_parsed ?? 0,
+      errors: r.errors ?? [],
+      uploaded_at: r.uploaded_at,
+    }));
+  } catch (error) {
+    console.error("Failed to fetch upload history:", error);
+    return [];
+  }
+}
+
+export async function fetchCandidateCounts(
+  jobId: string,
+): Promise<{ total: number; screened: number }> {
+  try {
+    const db = await getDb();
+    const [total, screened] = await Promise.all([
+      db.collection("candidates").countDocuments({ job_id: jobId }),
+      db.collection("candidates").countDocuments({
+        job_id: jobId,
+        "screening.rank": { $exists: true },
+      }),
+    ]);
+    return { total, screened };
+  } catch (error) {
+    console.error("Failed to fetch candidate counts:", error);
+    return { total: 0, screened: 0 };
+  }
 }
 
 export async function fetchTalentPages(

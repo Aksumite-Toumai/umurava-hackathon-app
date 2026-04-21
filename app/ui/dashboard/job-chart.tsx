@@ -1,10 +1,15 @@
 import { lusitana } from "@/app/ui/fonts";
-import { generateYAxis } from "@/app/lib/utils";
 import { UsersIcon } from "@heroicons/react/24/outline";
 import { getTranslations } from "next-intl/server";
 
-export default async function JobCard({ jobs }: { jobs: any[] }) {
-  const chartHeight = 350;
+type JobChartItem = {
+  id: string;
+  jobTitle: string;
+  candidates?: number;
+  talents?: number;
+};
+
+export default async function JobCard({ jobs }: { jobs: JobChartItem[] }) {
   const t = await getTranslations("Dashboard.charts");
 
   if (!jobs || jobs.length === 0) {
@@ -15,8 +20,15 @@ export default async function JobCard({ jobs }: { jobs: any[] }) {
     );
   }
 
-  const chartData = Array.isArray(jobs) ? jobs : [];
-  const { yAxisLabels, topLabel } = generateYAxis(chartData);
+  const rows = [...jobs]
+    .map((j) => ({
+      id: j.id,
+      title: j.jobTitle,
+      count: j.candidates ?? j.talents ?? 0,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const maxCount = Math.max(...rows.map((r) => r.count), 1);
 
   return (
     <div className="w-full md:col-span-4">
@@ -25,43 +37,38 @@ export default async function JobCard({ jobs }: { jobs: any[] }) {
       </h2>
 
       <div className="rounded-xl bg-gray-50 p-4">
-        <div className="flex flex-1 items-end gap-2 rounded-md bg-white p-4 md:gap-4 border border-gray-100">
-          <div
-            className="mb-8 hidden flex-col justify-between text-xs text-gray-400 sm:flex"
-            style={{ height: `${chartHeight}px` }}
-          >
-            {yAxisLabels.map((label) => (
-              <p key={label}>{label}</p>
-            ))}
-          </div>
-
-          <div className="flex flex-1 items-end justify-around gap-2 sm:gap-4 h-full">
-            {chartData.map((item: any) => (
-              <div
-                key={item.id}
-                className="flex flex-col items-center gap-2 group w-full"
-              >
-                <span className="opacity-0 transition-opacity group-hover:opacity-100 text-xs font-bold text-amber-700">
-                  {item.talents || item.candidates}
-                </span>
-
-                <div
-                  className="w-full max-w-[60px] rounded-t-md bg-amber-700 transition-colors hover:bg-amber-600"
-                  style={{
-                    height: `${topLabel === 0 ? 0 : (chartHeight / topLabel) * (item.candidates || item.talents)}px`,
-                    minHeight: "4px",
-                  }}
-                ></div>
-
-                <p
-                  className="text-xs text-gray-500 text-center w-full truncate px-1"
-                  title={item.jobTitle}
+        <div className="rounded-md bg-white p-4 border border-gray-100">
+          <ul className="divide-y divide-gray-100">
+            {rows.map((row) => {
+              const widthPct = maxCount === 0 ? 0 : (row.count / maxCount) * 100;
+              return (
+                <li
+                  key={row.id}
+                  className="flex items-center gap-3 py-2.5 group"
                 >
-                  {item.jobTitle}
-                </p>
-              </div>
-            ))}
-          </div>
+                  <p
+                    className="w-40 shrink-0 text-sm text-stone-700 truncate"
+                    title={row.title}
+                  >
+                    {row.title}
+                  </p>
+
+                  <div className="relative flex-1 h-6 rounded-md bg-amber-100/60 overflow-hidden">
+                    <div
+                      className="h-full rounded-md bg-amber-700 transition-all group-hover:bg-amber-600"
+                      style={{
+                        width: `${Math.max(widthPct, row.count > 0 ? 4 : 0)}%`,
+                      }}
+                    />
+                  </div>
+
+                  <span className="w-10 text-right text-sm font-semibold text-stone-800 tabular-nums">
+                    {row.count}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         <div className="flex items-center pb-2 pt-4 px-2">

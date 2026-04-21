@@ -85,6 +85,51 @@
     "score": "Score",
     "view_button": "Voir le profil"
   },
+  "ScreenButton": {
+    "top": "Top",
+    "label": "Évaluer les candidats",
+    "loading": "Évaluation..."
+  },
+  "UploadCandidates": {
+    "title": "Téléverser des candidats",
+    "drop_hint": "Déposez les fichiers ici ou cliquez pour parcourir",
+    "supported": "PDF, CSV, XLSX, JSON pris en charge",
+    "upload_button": "Téléverser {count} fichier",
+    "upload_button_plural": "Téléverser {count} fichiers",
+    "uploading": "Téléversement..."
+  },
+  "UploadHistory": {
+    "title": "Historique des téléversements",
+    "failed": "{count} échoué(s)",
+    "partial": "{count} partiel(s)"
+  },
+  "EmailCandidates": {
+    "button": "E-mailer les candidats",
+    "cutoff_label": "Top",
+    "cutoff_suffix": "candidats acceptés; les autres rejetés.",
+    "tab_accepted": "Acceptés",
+    "tab_rejected": "Rejetés",
+    "recipients": "Destinataires",
+    "subject": "Objet",
+    "body": "Message",
+    "preview_for": "Aperçu (pour {email})",
+    "copy_emails": "Copier les e-mails",
+    "download_csv": "Télécharger CSV",
+    "open_mail": "Ouvrir dans la messagerie"
+  },
+  "JobDetail": {
+    "experience_required": "Expérience requise",
+    "key_skills": "Compétences clés",
+    "date_posted": "Date de publication",
+    "detailed_requirements": "Exigences détaillées",
+    "back_to_jobs": "Retour aux emplois",
+    "edit_job": "Modifier l'offre",
+    "talent_upload_status": "Statut du téléversement",
+    "talents_uploaded": "{count} talents téléversés",
+    "not_screened": "non encore évalués",
+    "screened_count": "{count} évalués",
+    "no_candidates_uploaded": "Aucun candidat téléversé pour le moment."
+  },
   "Common": {
     "back": "Retour",
     "edit": "Modifier",

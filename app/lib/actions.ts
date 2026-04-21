@@ -11,6 +11,8 @@ import { signIn, auth } from "@/auth";
 import { getDb } from "@/app/lib/db/mongodb";
 import { JobStatus } from "@/app/lib/schemas/job";
 import { parseUploadedFile } from "@/app/lib/services/file-parser";
+import { upsertCandidates } from "@/app/lib/services/candidate-upsert";
+import { logUpload } from "@/app/lib/services/upload-log";
 import { screenCandidates } from "@/app/lib/services/screening";
 import type { CandidateDocument } from "@/app/lib/schemas/candidate";
 
@@ -89,27 +91,32 @@ const CreateJobSchema = z.object({
 });
 
 async function handleFileUpload(jobId: string, file: File) {
+  const db = await getDb();
+  const uploads = db.collection("uploads");
   try {
     const result = await parseUploadedFile(file);
+    const stats =
+      result.candidates.length > 0
+        ? await upsertCandidates(db.collection("candidates"), jobId, result.candidates)
+        : { inserted: 0, merged: 0 };
 
-    if (result.candidates.length === 0) return;
-
-    const db = await getDb();
-    const candidates = db.collection("candidates");
-    const created_at = new Date().toISOString();
-
-    const docs = result.candidates.map((c) => ({
+    await logUpload(uploads, {
       job_id: jobId,
-      ...c.profile,
-      source: c.source,
-      raw_resume_text: c.raw_resume_text,
-      screening: null,
-      created_at,
-    }));
-
-    await candidates.insertMany(docs);
+      filename: file.name,
+      file_type: result.fileType,
+      candidates_parsed: stats.inserted + stats.merged,
+      errors: result.errors,
+    });
   } catch (error) {
     console.error("File upload during job action failed:", error);
+    await logUpload(uploads, {
+      job_id: jobId,
+      filename: file.name,
+      file_type: "unknown",
+      candidates_parsed: 0,
+      errors: [error instanceof Error ? error.message : "Unknown error"],
+      status: "failed",
+    }).catch(() => {});
   }
 }
 
@@ -239,6 +246,66 @@ export async function updateJobAction(_prevState: unknown, formData: FormData) {
   }
 }
 
+export type EmailRecipient = {
+  email: string;
+  first_name: string;
+  last_name: string;
+  rank: number | null;
+  final_score: number | null;
+};
+
+export type EmailBatch = {
+  job_role: string;
+  job_company: string;
+  accepted: EmailRecipient[];
+  rejected: EmailRecipient[];
+};
+
+export async function fetchEmailBatch(jobId: string): Promise<EmailBatch | { error: string }> {
+  if (!ObjectId.isValid(jobId)) {
+    return { error: "Invalid Job ID." };
+  }
+
+  const db = await getDb();
+  const job = await db.collection("jobs").findOne({ _id: new ObjectId(jobId) });
+  if (!job) return { error: "Job not found." };
+
+  const rows = await db
+    .collection("candidates")
+    .find({ job_id: jobId })
+    .toArray();
+
+  const accepted: EmailRecipient[] = [];
+  const rejected: EmailRecipient[] = [];
+
+  for (const c of rows) {
+    if (!c.email) continue;
+    const recipient: EmailRecipient = {
+      email: c.email,
+      first_name: c.first_name ?? "",
+      last_name: c.last_name ?? "",
+      rank: c.screening?.rank ?? null,
+      final_score: c.screening?.final_score ?? null,
+    };
+
+    // Accepted = candidate appears in shortlist (has rank set during screening)
+    if (recipient.rank !== null) {
+      accepted.push(recipient);
+    } else {
+      rejected.push(recipient);
+    }
+  }
+
+  accepted.sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0));
+
+  return {
+    job_role: (job.role as string) || "",
+    job_company: (job.company as string) || "",
+    accepted,
+    rejected,
+  };
+}
+
 export async function deleteJobAction(id: string) {
   try {
     if (!ObjectId.isValid(id)) return;
@@ -252,11 +319,16 @@ export async function deleteJobAction(id: string) {
   }
 }
 
-export async function screenCandidatesAction(jobId: string) {
+export async function screenCandidatesAction(
+  jobId: string,
+  topN: number = 10,
+) {
   try {
     if (!ObjectId.isValid(jobId)) {
       return { error: "Invalid Job ID." };
     }
+
+    const safeTopN = Math.max(1, Math.min(topN, 50));
 
     const db = await getDb();
     const jobs = db.collection("jobs");
@@ -304,7 +376,7 @@ export async function screenCandidatesAction(jobId: string) {
         job_description: (job.requirements as string) || "",
         required_skills,
         experience_level: (job.experience as string) || "",
-        top_n: Math.min(candidatesForScreening.length, 20),
+        top_n: Math.min(candidatesForScreening.length, safeTopN),
       },
       candidatesForScreening,
     );
