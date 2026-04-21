@@ -149,7 +149,6 @@ export type ScreeningResult = z.infer<typeof ScreeningResultSchema>;
 // Candidate document (what we store in MongoDB)
 // = Talent Profile + our extensions
 // ============================================================
-
 export type CandidateSource = "json" | "pdf" | "csv" | "xlsx";
 
 export type CandidateDocument = TalentProfile & {

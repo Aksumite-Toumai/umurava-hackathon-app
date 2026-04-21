@@ -11,6 +11,7 @@ import {
   AcademicCapIcon,
   LinkIcon,
 } from "@heroicons/react/24/outline";
+import { ViewTalent } from "../talents/button";
 
 type Screening = {
   rank: number;
@@ -127,9 +128,7 @@ export default function TalentSidebar({
               className="p-4 transition-colors hover:bg-gray-50/50"
             >
               <button
-                onClick={() =>
-                  setExpandedId(isExpanded ? null : candidate._id)
-                }
+                onClick={() => setExpandedId(isExpanded ? null : candidate._id)}
                 className="flex w-full items-center justify-between text-left"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -149,7 +148,9 @@ export default function TalentSidebar({
                       Score: {s.final_score.toFixed(1)}/100
                     </p>
                   </div>
+                  <ViewTalent id={candidate._id} />
                 </div>
+
                 {isExpanded ? (
                   <ChevronUpIcon className="h-5 w-5 text-gray-400 shrink-0" />
                 ) : (
@@ -232,7 +233,9 @@ export default function TalentSidebar({
                               {exp.role}
                             </span>{" "}
                             <span className="text-stone-500">at</span>{" "}
-                            <span className="text-stone-700">{exp.company}</span>
+                            <span className="text-stone-700">
+                              {exp.company}
+                            </span>
                             <span className="text-stone-400 ml-1">
                               ({exp["Start Date"]} – {exp["End Date"]})
                             </span>

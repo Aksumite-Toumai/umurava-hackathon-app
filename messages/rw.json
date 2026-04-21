@@ -1,0 +1,94 @@
+{
+  "HomePage": {
+    "title": "Ikaze kuri Aksumite-Toumai.",
+    "description": "Iki ni igicuruzwa cya AI kigenewe urwego rw'abakozi (Human Resources).",
+    "login": "Injira",
+    "no_account": "Nta konti ufite?",
+    "register": "Iyandikishe hano.",
+    "logo_alt": "Ikirango cya Aksumite-Toumai"
+  },
+  "LoginForm": {
+    "title": "Injira kugira ngo ukomeze.",
+    "email_label": "Imeyili",
+    "email_placeholder": "Andika imeyili yawe",
+    "password_label": "Ijambo ry'ibanga",
+    "password_placeholder": "Andika ijambo ry'ibanga",
+    "login_button": "Injira",
+    "no_account": "Nta konti ufite?",
+    "register_link": "Iyandikishe hano."
+  },
+  "RegisterForm": {
+    "title": "Fungura konti yawe.",
+    "username_label": "Izina ry'ukoresha",
+    "username_placeholder": "Andika izina ryawe",
+    "email_label": "Imeyili",
+    "email_placeholder": "Andika imeyili yawe",
+    "password_label": "Ijambo ry'ibanga",
+    "password_placeholder": "Andika ijambo ry'ibanga",
+    "retype_password_label": "Ongera wandike ijambo ry'ibanga",
+    "retype_password_placeholder": "Ongera wandike ijambo ry'ibanga",
+    "register_button": "Iyandikishe",
+    "has_account": "Usanzwe ufite konti?",
+    "login_link": "Injira hano."
+  },
+  "Sidebar": {
+    "home": "Ahabanza",
+    "jobs": "Akazi",
+    "results": "Ibyavuyemo"
+  },
+  "Navigation": {
+    "dashboard": "Ikibaho",
+    "jobs": "Akazi",
+    "settings": "Igenamiterere"
+  },
+  "Dashboard": {
+    "please_log_in": "Nyamuneka injira kugira ngo urebe ikibaho cyawe.",
+    "total_jobs": "Akazi Kose",
+    "pending_jobs": "Akazi Gategereje",
+    "completed_jobs": "Akazi Kasuzumwe",
+    "total_candidates": "Abakandida Bose",
+    "charts": {
+      "top_jobs": "Akazi ukurikije ubwinshi bw'abakandida",
+      "latest_talents": "Abakandida beza ba vuba",
+      "no_data": "Nta makuru ahari.",
+      "talents_per_job": "Abakandida kuri buri kazi",
+      "updated_just_now": "Bivugururwe nonaha"
+    }
+  },
+  "JobsPage": {
+    "title": "Akazi",
+    "search_placeholder": "Shakisha akazi...",
+    "create_job": "Kurema Akazi",
+    "no_skills": "Nta bumenyi bwihariye bugaragara",
+    "not_specified": "Ntibyavuzwe",
+    "no_jobs_found": "Nta kazi kabonetse.",
+    "please_log_in": "Nyamuneka injira kugira ngo urebe akazi kawe.",
+    "table_headers": {
+      "role": "Umwanya",
+      "company": "Ikigo",
+      "experience": "Uburambe",
+      "skills": "Ubumenyi",
+      "date_created": "Itariki",
+      "status": "Imiterere",
+      "actions": "Ibyo gukora"
+    },
+    "actions": {
+      "view": "Reba",
+      "edit": "Hindura",
+      "delete": "Siba"
+    }
+  },
+  "TalentSidebar": {
+    "title": "Abahuye Cyane (AI)",
+    "no_candidates": "Nta bakandida barimo. Shyiramo dosiye mugihe ushyiraho cyangwa uhindura akazi.",
+    "upload_prompt": "Abakandida {count} bashyizwemo. Kanda \"Suzuma Abakandida\" kugira ngo AI ibasuzume.",
+    "score": "Amanota",
+    "view_button": "Reba Umukandida"
+  },
+  "Common": {
+    "back": "Subira Inyuma",
+    "edit": "Hindura",
+    "email": "Ohereza Imeyili",
+    "search": "Shakisha..."
+  }
+}

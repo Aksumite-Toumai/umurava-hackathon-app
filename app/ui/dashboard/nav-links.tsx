@@ -8,26 +8,25 @@ import {
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
+import { useTranslations } from "next-intl";
 
 const links = [
-  { name: "Home", href: "/dashboard", icon: HomeIcon },
-  {
-    name: "Jobs",
-    href: "/dashboard/jobs",
-    icon: DocumentDuplicateIcon,
-  },
-  { name: "Results", href: "/dashboard/results", icon: SparklesIcon },
+  { key: "home", href: "/dashboard", icon: HomeIcon },
+  { key: "jobs", href: "/dashboard/jobs", icon: DocumentDuplicateIcon },
+  { key: "results", href: "/dashboard/results", icon: SparklesIcon },
 ];
 
 export default function NavLinks() {
   const pathname = usePathname();
+  const t = useTranslations("Sidebar");
+
   return (
     <>
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
           <Link
-            key={link.name}
+            key={link.key}
             href={link.href}
             className={clsx(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-orange-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3",
@@ -35,7 +34,8 @@ export default function NavLinks() {
             )}
           >
             <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+
+            <p className="hidden md:block">{t(link.key)}</p>
           </Link>
         );
       })}
