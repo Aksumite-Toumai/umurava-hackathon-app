@@ -1,0 +1,94 @@
+{
+  "HomePage": {
+    "title": "Welcome to Aksumite-Toumai.",
+    "description": "This is an AI product for Human Resources Industry.",
+    "login": "Log in",
+    "no_account": "Don't have an account?",
+    "register": "Register here.",
+    "logo_alt": "Aksumite-Toumai logo showing desktop version"
+  },
+  "LoginForm": {
+    "title": "Log in to continue.",
+    "email_label": "Email",
+    "email_placeholder": "Enter your email address",
+    "password_label": "Password",
+    "password_placeholder": "Enter password",
+    "login_button": "Log in",
+    "no_account": "Don't have an account?",
+    "register_link": "Register here."
+  },
+  "RegisterForm": {
+    "title": "Create your account.",
+    "username_label": "Username",
+    "username_placeholder": "Enter your username",
+    "email_label": "Email",
+    "email_placeholder": "Enter your email address",
+    "password_label": "Password",
+    "password_placeholder": "Enter password",
+    "retype_password_label": "Retype Password",
+    "retype_password_placeholder": "Re-enter password",
+    "register_button": "Register",
+    "has_account": "Already have an account?",
+    "login_link": "Login here."
+  },
+  "Sidebar": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "results": "Results"
+  },
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "jobs": "Jobs",
+    "settings": "Settings"
+  },
+  "Dashboard": {
+    "please_log_in": "Please log in to view your dashboard.",
+    "total_jobs": "Total Jobs",
+    "pending_jobs": "Pending Jobs",
+    "completed_jobs": "Screened Jobs",
+    "total_candidates": "Total Talents",
+    "charts": {
+      "top_jobs": "Jobs by Talent Volume",
+      "latest_talents": "Latest Top Talents",
+      "no_data": "No data available.",
+      "talents_per_job": "Talents per job",
+      "updated_just_now": "Updated just now"
+    }
+  },
+  "JobsPage": {
+    "title": "Jobs",
+    "search_placeholder": "Search jobs...",
+    "create_job": "Create Job",
+    "no_skills": "No specific skills listed",
+    "not_specified": "Not specified",
+    "no_jobs_found": "No job found.",
+    "please_log_in": "Please log in to view your jobs.",
+    "table_headers": {
+      "role": "Role",
+      "company": "Company",
+      "experience": "Experience",
+      "skills": "Skills",
+      "date_created": "Date Created",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "TalentSidebar": {
+    "title": "Top AI Matches",
+    "no_candidates": "No candidates yet. Upload a file when creating or editing the job.",
+    "upload_prompt": "{count} candidates uploaded. Click \"Screen Candidates\" to run AI screening.",
+    "score": "Score",
+    "view_button": "View Talent"
+  },
+  "Common": {
+    "back": "Back",
+    "edit": "Edit",
+    "email": "Email Profile",
+    "search": "Search..."
+  }
+}

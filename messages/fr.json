@@ -1,0 +1,94 @@
+{
+  "HomePage": {
+    "title": "Bienvenue sur Aksumite-Toumai.",
+    "description": "Ceci est un produit d'IA pour l'industrie des ressources humaines.",
+    "login": "Se connecter",
+    "no_account": "Vous n'avez pas de compte ?",
+    "register": "Inscrivez-vous ici.",
+    "logo_alt": "Logo Aksumite-Toumai version bureau"
+  },
+  "LoginForm": {
+    "title": "Connectez-vous pour continuer.",
+    "email_label": "E-mail",
+    "email_placeholder": "Entrez votre adresse e-mail",
+    "password_label": "Mot de passe",
+    "password_placeholder": "Entrez votre mot de passe",
+    "login_button": "Se connecter",
+    "no_account": "Vous n'avez pas de compte ?",
+    "register_link": "Inscrivez-vous ici."
+  },
+  "RegisterForm": {
+    "title": "Créez votre compte.",
+    "username_label": "Nom d'utilisateur",
+    "username_placeholder": "Entrez votre nom d'utilisateur",
+    "email_label": "E-mail",
+    "email_placeholder": "Entrez votre adresse e-mail",
+    "password_label": "Mot de passe",
+    "password_placeholder": "Entrez votre mot de passe",
+    "retype_password_label": "Confirmez le mot de passe",
+    "retype_password_placeholder": "Saisissez à nouveau le mot de passe",
+    "register_button": "S'inscrire",
+    "has_account": "Vous avez déjà un compte ?",
+    "login_link": "Connectez-vous ici."
+  },
+  "Navigation": {
+    "dashboard": "Tableau de bord",
+    "jobs": "Emplois",
+    "settings": "Paramètres"
+  },
+  "Sidebar": {
+    "home": "Accueil",
+    "jobs": "Emplois",
+    "results": "Résultats"
+  },
+  "Dashboard": {
+    "please_log_in": "Veuillez vous connecter pour voir votre tableau de bord.",
+    "total_jobs": "Emplois Totaux",
+    "pending_jobs": "Emplois en attente",
+    "completed_jobs": "Emplois évalués",
+    "total_candidates": "Talents totaux",
+    "charts": {
+      "top_jobs": "Emplois par volume de talents",
+      "latest_talents": "Derniers meilleurs talents",
+      "no_data": "Aucune donnée disponible.",
+      "talents_per_job": "Talents par emploi",
+      "updated_just_now": "Mis à jour à l'instant"
+    }
+  },
+  "JobsPage": {
+    "title": "Emplois",
+    "search_placeholder": "Rechercher des emplois...",
+    "create_job": "Créer un emploi",
+    "no_skills": "Aucune compétence spécifique indiquée",
+    "not_specified": "Non spécifié",
+    "no_jobs_found": "Aucun emploi trouvé.",
+    "please_log_in": "Veuillez vous connecter pour voir vos emplois.",
+    "table_headers": {
+      "role": "Rôle",
+      "company": "Entreprise",
+      "experience": "Expérience",
+      "skills": "Compétences",
+      "date_created": "Date de création",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    }
+  },
+  "TalentSidebar": {
+    "title": "Meilleures correspondances IA",
+    "no_candidates": "Aucun candidat pour le moment. Téléchargez un fichier lors de la création ou de la modification de l'offre.",
+    "upload_prompt": "{count} candidats téléchargés. Cliquez sur \"Évaluer les candidats\" pour lancer l'analyse IA.",
+    "score": "Score",
+    "view_button": "Voir le profil"
+  },
+  "Common": {
+    "back": "Retour",
+    "edit": "Modifier",
+    "email": "Envoyer un e-mail",
+    "search": "Rechercher..."
+  }
+}

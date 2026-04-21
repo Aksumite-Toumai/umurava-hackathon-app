@@ -7,6 +7,7 @@ import { JobTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
 import { fetchJobPages } from "@/app/lib/data";
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -18,6 +19,9 @@ export default async function Page(props: {
   if (!session?.user?.id) {
     return null;
   }
+
+  const t = await getTranslations("JobsPage");
+
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
@@ -26,10 +30,10 @@ export default async function Page(props: {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Jobs</h1>
+        <h1 className={`${lusitana.className} text-2xl`}>{t("title")}</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search jobs..." />
+        <Search placeholder={t("search_placeholder")} />
         <CreateJob />
       </div>
       <Suspense key={query + currentPage} fallback={<JobTableSkeleton />}>

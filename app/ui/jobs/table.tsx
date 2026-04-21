@@ -2,8 +2,8 @@ import { UpdateJob, DeleteJob, ViewJob } from "@/app/ui/jobs/buttons";
 import { auth } from "@/auth";
 import { fetchJobs } from "@/app/lib/data";
 import JobStatus from "./status";
+import { getTranslations } from "next-intl/server";
 
-// Helper function to format the date nicely
 const formatDate = (dateString?: string) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
@@ -23,11 +23,12 @@ export default async function JobsTable({
 }) {
   const session = await auth();
   const userId = session?.user?.id;
+  const t = await getTranslations("JobsPage");
 
   if (!userId) {
     return (
       <div className="mt-6 text-center text-stone-500">
-        Please log in to view your jobs.
+        {t("please_log_in")}
       </div>
     );
   }
@@ -38,7 +39,7 @@ export default async function JobsTable({
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          {/* --- DESKTOP VIEW (Table) --- */}
+          {/* --- MOBILE VIEW --- */}
           <div className="md:hidden">
             {jobs?.map((job) => (
               <div
@@ -56,7 +57,7 @@ export default async function JobsTable({
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-sm text-stone-500 max-w-[200px] truncate">
-                      {job.skills || "No specific skills listed"}
+                      {job.skills || t("no_skills")}
                     </p>
                     <p className="text-xs text-stone-400 mt-1">
                       {formatDate(job.created_at)}
@@ -72,34 +73,34 @@ export default async function JobsTable({
             ))}
 
             {jobs.length === 0 && (
-              <p className="mt-4 text-gray-400">No job found.</p>
+              <p className="mt-4 text-gray-400">{t("no_jobs_found")}</p>
             )}
           </div>
 
-          {/* --- DESKTOP VIEW (Table) --- */}
+          {/* --- DESKTOP VIEW --- */}
           <table className="hidden min-w-full text-stone-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Role
+                  {t("table_headers.role")}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Company
+                  {t("table_headers.company")}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Experience
+                  {t("table_headers.experience")}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Skills
+                  {t("table_headers.skills")}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date Created
+                  {t("table_headers.date_created")}
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  {t("table_headers.status")}
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Actions</span>
+                  <span className="sr-only">{t("table_headers.actions")}</span>
                 </th>
               </tr>
             </thead>
@@ -116,10 +117,10 @@ export default async function JobsTable({
                     {job.company}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-stone-600">
-                    {job.experience || "Not specified"}
+                    {job.experience || t("not_specified")}
                   </td>
                   <td className="px-3 py-3 text-stone-600 max-w-[200px] truncate">
-                    {job.skills || "Not specified"}
+                    {job.skills || t("not_specified")}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 text-stone-500">
                     {formatDate(job.created_at)}
@@ -139,8 +140,10 @@ export default async function JobsTable({
 
               {jobs.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-stone-500">
-                    <span className="mt-4 text-gray-400">No job found.</span>
+                  <td colSpan={7} className="py-10 text-center text-stone-500">
+                    <span className="mt-4 text-gray-400">
+                      {t("no_jobs_found")}
+                    </span>
                   </td>
                 </tr>
               )}

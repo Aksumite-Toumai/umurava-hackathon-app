@@ -40,7 +40,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       />
 
       <div className="mt-6 flex flex-col gap-6">
-        {/* --- 1. HEADER & ACTION CARD --- */}
+        {/* --- HEADER & ACTION CARD --- */}
         <div className="overflow-hidden rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100 md:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex flex-col gap-2">
@@ -94,33 +94,33 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           )}
         </div>
 
-        {/* --- 2. MAIN CONTENT GRID --- */}
+        {/* MAIN CONTENT GRID*/}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-6 lg:col-span-2">
-            {/* 🌟 NEW: AI SCREENING REPORT 🌟 */}
+            {/* AI SCREENING REPORT */}
             {talent.screening && (
-              <div className="rounded-xl border-t-4 border-indigo-500 bg-indigo-50 p-6 shadow-sm ring-1 ring-indigo-100">
-                <div className="mb-6 flex flex-col justify-between gap-4 border-b border-indigo-100 pb-4 sm:flex-row sm:items-center">
-                  <h2 className="flex items-center gap-2 text-xl font-bold text-indigo-900">
-                    <SparklesIcon className="h-6 w-6 text-indigo-600" />
+              <div className="rounded-xl border-t-4 border-amber-700 bg-amber-100 p-6 shadow-sm ring-1 ring-amber-100">
+                <div className="mb-6 flex flex-col justify-between gap-4 border-b border-amber-100 pb-4 sm:flex-row sm:items-center">
+                  <h2 className="flex items-center gap-2 text-xl font-bold text-amber-900">
+                    <SparklesIcon className="h-6 w-6 text-amber-800" />
                     AI Screening Report
                   </h2>
                   <div className="flex flex-wrap gap-3">
-                    <span className="rounded-full bg-white px-4 py-1 text-sm font-bold text-indigo-800 shadow-sm ring-1 ring-indigo-200">
+                    <span className="rounded-full bg-white px-4 py-1 text-sm font-bold text-amber-800 shadow-sm ring-1 ring-amber-200">
                       Rank #{talent.screening.rank}
                     </span>
-                    <span className="rounded-full bg-indigo-600 px-4 py-1 text-sm font-bold text-white shadow-sm">
+                    <span className="rounded-full bg-amber-600 px-4 py-1 text-sm font-bold text-white shadow-sm">
                       Score: {talent.screening.final_score}/100
                     </span>
                   </div>
                 </div>
 
-                <div className="mb-6 border-l-4 border-indigo-300 pl-4">
-                  <h3 className="mb-1 text-xs font-bold uppercase tracking-wider text-indigo-800">
+                <div className="mb-6 border-l-4 border-amber-300 pl-4">
+                  <h3 className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-900">
                     AI Recommendation
                   </h3>
-                  <p className="text-base font-medium italic leading-relaxed text-indigo-900">
+                  <p className="text-base font-medium italic leading-relaxed text-amber-900">
                     "{talent.screening.recommendation}"
                   </p>
                 </div>
@@ -132,7 +132,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                       ([category, score]) => (
                         <div
                           key={category}
-                          className="rounded-lg border border-indigo-100 bg-white p-3 shadow-sm"
+                          className="rounded-lg border border-amber-100 bg-white p-3 shadow-sm"
                         >
                           <div className="mb-1 truncate text-xs uppercase tracking-wider text-stone-500">
                             {category.replace(/_/g, " ")}
