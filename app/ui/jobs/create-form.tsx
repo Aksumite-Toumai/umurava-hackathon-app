@@ -128,7 +128,7 @@ export default function Form() {
         </div>
 
         {/* Talent File Upload */}
-        <div className="mt-8 mb-4 border-t border-gray-200 pt-6">
+        {/* <div className="mt-8 mb-4 border-t border-gray-200 pt-6">
           <label
             htmlFor="talents_file"
             className="mb-2 block text-sm font-medium text-stone-900"
@@ -151,7 +151,7 @@ export default function Form() {
               <DocumentArrowUpIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-amber-700" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {state?.error && (

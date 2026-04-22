@@ -128,7 +128,7 @@ export default function EditJobForm({ job }: { job: any }) {
             </div>
           </div>
         </div>
-        Talent File Upload
+        {/* Talent File Upload
         <div className="mt-8 mb-4 border-t border-gray-200 pt-6">
           <label
             htmlFor="talents_file"
@@ -150,7 +150,7 @@ export default function EditJobForm({ job }: { job: any }) {
               <DocumentArrowUpIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-amber-700" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Error Message Display */}
