@@ -43,7 +43,7 @@ export default function ScreenButton({ jobId }: { jobId: string }) {
             value={topN}
             onChange={(e) => setTopN(Number(e.target.value))}
             disabled={loading}
-            className="bg-transparent font-medium text-stone-800 outline-none"
+            className="bg-transparent font-medium text-stone-800 border-none focus:outline-none focus:ring-0 h-10"
           >
             {TOP_N_OPTIONS.map((n) => (
               <option key={n} value={n}>

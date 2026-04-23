@@ -13,7 +13,10 @@ function tierFor(rank: number | null | undefined): Tier {
   return "below";
 }
 
-const TIER_STYLES: Record<Tier, { row: string; indicator: string; label: string; labelText: string }> = {
+const TIER_STYLES: Record<
+  Tier,
+  { row: string; indicator: string; label: string; labelText: string }
+> = {
   champion: {
     row: "bg-green-50/60 hover:bg-green-50",
     indicator: "bg-green-500",
@@ -89,7 +92,9 @@ export default async function Table({
                       style={{ borderLeftColor: undefined }}
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <span className={`h-5 w-1 rounded-sm ${style.indicator}`} />
+                        <span
+                          className={`h-5 w-1 rounded-sm ${style.indicator}`}
+                        />
                         <span
                           className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${style.label}`}
                         >
@@ -101,7 +106,9 @@ export default async function Table({
                       <p className="font-medium text-stone-900">
                         {talent.first_name} {talent.last_name}
                       </p>
-                      <p className="text-xs text-stone-500">{talent.headline}</p>
+                      <p className="text-xs text-stone-500">
+                        {talent.headline}
+                      </p>
                       <p className="text-xs text-stone-400">{talent.email}</p>
                       <div className="mt-3 flex justify-end gap-2">
                         <ViewTalent id={talent._id} />
@@ -121,7 +128,10 @@ export default async function Table({
               <table className="hidden min-w-full rounded-md text-gray-900 md:table">
                 <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
                   <tr>
-                    <th scope="col" className="w-14 py-5 pl-4 font-medium sm:pl-6">
+                    <th
+                      scope="col"
+                      className="w-14 py-5 pl-4 font-medium sm:pl-6"
+                    >
                       Rank
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
@@ -136,7 +146,10 @@ export default async function Table({
                     <th scope="col" className="px-3 py-5 font-medium">
                       Status
                     </th>
-                    <th scope="col" className="relative py-3 pl-6 pr-3 text-right">
+                    <th
+                      scope="col"
+                      className="relative py-3 pl-6 pr-3 text-right"
+                    >
                       <span className="pr-2">Actions</span>
                     </th>
                   </tr>

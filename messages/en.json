@@ -174,5 +174,15 @@
       "key_strength": "Key Strength",
       "actions": "Actions"
     }
+  },
+  "ErrorPage": {
+    "title": "Something went wrong!",
+    "description": "We lost connection to the database. This is usually temporary, so please click the button below to try again.",
+    "try_again": "Try again"
+  },
+  "NotFoundPage": {
+    "title": "404 Not Found",
+    "description": "Could not find the requested resource or data.",
+    "go_back": "Go Back to Dashboard"
   }
 }

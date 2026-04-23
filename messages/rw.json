@@ -174,5 +174,15 @@
       "key_strength": "Ubumenyi bw'ingenzi",
       "actions": "Ibyo gukora"
     }
+  },
+  "ErrorPage": {
+    "title": "Habaye ikibazo!",
+    "description": "Twabuze umurongo wa database. Ibi bikunze kuba by'igihe gito, nyamuneka kanda ahanditse ngo wongere ugerageze.",
+    "try_again": "Ongera ugerageze"
+  },
+  "NotFoundPage": {
+    "title": "404 Ntibibonetse",
+    "description": "Ibyo mwashakishije ntibibashije kuboneka.",
+    "go_back": "Subira Ahabanza"
   }
 }

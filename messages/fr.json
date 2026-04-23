@@ -174,5 +174,15 @@
       "key_strength": "Atout principal",
       "actions": "Actions"
     }
+  },
+  "ErrorPage": {
+    "title": "Un problème est survenu !",
+    "description": "Nous avons perdu la connexion à la base de données. C'est généralement temporaire, veuillez cliquer sur le bouton ci-dessous pour réessayer.",
+    "try_again": "Réessayer"
+  },
+  "NotFoundPage": {
+    "title": "404 Introuvable",
+    "description": "Impossible de trouver la ressource ou les données demandées.",
+    "go_back": "Retour au tableau de bord"
   }
 }

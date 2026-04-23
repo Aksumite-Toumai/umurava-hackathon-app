@@ -40,14 +40,15 @@ export default async function JobCard({ jobs }: { jobs: JobChartItem[] }) {
         <div className="rounded-md bg-white p-4 border border-gray-100">
           <ul className="divide-y divide-gray-100">
             {rows.map((row) => {
-              const widthPct = maxCount === 0 ? 0 : (row.count / maxCount) * 100;
+              const widthPct =
+                maxCount === 0 ? 0 : (row.count / maxCount) * 100;
               return (
                 <li
                   key={row.id}
                   className="flex items-center gap-3 py-2.5 group"
                 >
                   <p
-                    className="w-40 shrink-0 text-sm text-stone-700 truncate"
+                    className={`${lusitana.className} w-40 shrink-0 text-l text-stone-700 truncate`}
                     title={row.title}
                   >
                     {row.title}
@@ -62,7 +63,9 @@ export default async function JobCard({ jobs }: { jobs: JobChartItem[] }) {
                     />
                   </div>
 
-                  <span className="w-10 text-right text-sm font-semibold text-stone-800 tabular-nums">
+                  <span
+                    className={`${lusitana.className} w-10 text-right text-xl font-semibold text-stone-800 tabular-nums`}
+                  >
                     {row.count}
                   </span>
                 </li>
@@ -73,7 +76,9 @@ export default async function JobCard({ jobs }: { jobs: JobChartItem[] }) {
 
         <div className="flex items-center pb-2 pt-4 px-2">
           <UsersIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 font-medium">
+          <h3
+            className={`${lusitana.className} ml-2 text-sm text-gray-500 font-medium`}
+          >
             {t("talents_per_job")}
           </h3>
         </div>

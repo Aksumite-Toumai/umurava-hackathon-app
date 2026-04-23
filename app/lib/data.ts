@@ -1,13 +1,28 @@
 import { ObjectId } from "mongodb";
-
 import { getDb } from "@/app/lib/db/mongodb";
 import type { JobDocument } from "@/app/lib/schemas/job";
 import type { CandidateDocument } from "@/app/lib/schemas/candidate";
 import { unstable_noStore as noStore } from "next/cache";
+import {
+  ChartData,
+  DashboardStats,
+  FilterJob,
+  ResultRow,
+  TopTalent,
+  UploadRecord,
+} from "./definitions";
 
+// Max number of item to diplay in a table
 const TABLE_ITEMS_PER_PAGE = 6;
 
-export async function fetchDashboardStats(userId: string) {
+/**
+ * Fetches high-level statistics for the main dashboard.
+ * * @param userId - The ID of the currently logged-in user.
+ * @returns An object containing counts for total jobs, pending jobs, done jobs, and candidate metrics.
+ */
+export async function fetchDashboardStats(
+  userId: string,
+): Promise<DashboardStats> {
   noStore();
 
   try {
@@ -52,7 +67,16 @@ export async function fetchDashboardStats(userId: string) {
   }
 }
 
-export async function fetchTopJobsChart(userId: string) {
+/**
+ * Fetches data for the "Jobs by Talent Volume" bar chart on the dashboard.
+ * @param userId - The ID of the currently logged-in user.
+ * @param top_n - Number of recent jobs to fetch.
+ * @returns A Promise resolving to an array of ChartData.
+ */
+export async function fetchTopJobsChart(
+  userId: string,
+  top_n: number = 5,
+): Promise<ChartData[]> {
   noStore();
 
   try {
@@ -62,7 +86,7 @@ export async function fetchTopJobsChart(userId: string) {
       .collection("jobs")
       .find({ user_id: userId })
       .sort({ created_at: -1 })
-      .limit(6)
+      .limit(top_n)
       .toArray();
 
     if (recentJobs.length === 0) return [];
@@ -88,7 +112,16 @@ export async function fetchTopJobsChart(userId: string) {
   }
 }
 
-export async function fetchLatestTopTalents(userId: string) {
+/**
+ * Fetches the top 5 highest-ranked AI screened candidates across all jobs for a user.
+ * @param userId - The ID of the currently logged-in user.
+ * @param top_n - Top n talents to fetch.
+ * @returns A Promise resolving to an array of TopTalent.
+ */
+export async function fetchLatestTopTalents(
+  userId: string,
+  top_n: number = 5,
+): Promise<TopTalent[]> {
   noStore();
 
   try {
@@ -117,7 +150,7 @@ export async function fetchLatestTopTalents(userId: string) {
         job_id: { $in: jobIds },
       })
       .sort({ "screening.rank": 1 })
-      .limit(5)
+      .limit(top_n)
       .toArray();
 
     return topTalents.map((talent) => ({
@@ -134,6 +167,16 @@ export async function fetchLatestTopTalents(userId: string) {
   }
 }
 
+// ==========================================
+// JOB DATA FETCHERS
+// ==========================================
+/**
+ * Fetches a paginated list of jobs created by the user, with optional search filtering.
+ * @param userId - The ID of the currently logged-in user.
+ * @param query - The search string.
+ * @param currentPage - The current page number from the table.
+ * @returns A Promise resolving to an array of JobDocuments.
+ */
 export async function fetchJobs(
   userId: string,
   query: string = "",
@@ -177,6 +220,11 @@ export async function fetchJobs(
   }
 }
 
+/**
+ * Fetches a single job by its MongoDB document ID.
+ * @param id - The ObjectId string of the job.
+ * @returns A Promise resolving to a JobDocument.
+ */
 export async function fetchJobById(id: string): Promise<JobDocument> {
   if (!ObjectId.isValid(id)) {
     throw new Error("Invalid job ID.");
@@ -200,6 +248,12 @@ export async function fetchJobById(id: string): Promise<JobDocument> {
   };
 }
 
+/**
+ * Calculates the total number of pages required for the Jobs table pagination.
+ * @param userId - The ID of the currently logged-in user.
+ * @param query - The current search query.
+ * @returns A Promise resolving to a number representing total pages.
+ */
 export async function fetchJobPages(
   userId: string,
   query: string,
@@ -228,6 +282,16 @@ export async function fetchJobPages(
   }
 }
 
+// ==========================================
+// CANDIDATE DATA FETCHERS
+// ==========================================
+
+/**
+ * Fetches a limited list of candidates for a specific job, sorted by AI Rank.
+ * @param jobId - The ID of the job.
+ * @param limit - Maximum number of candidates to return.
+ * @returns A Promise resolving to an array of CandidateDocuments.
+ */
 export async function fetchCandidates(
   jobId: string,
   limit: number = 20,
@@ -269,6 +333,13 @@ export async function fetchCandidates(
   }
 }
 
+/**
+ * Fetches a paginated and filtered list of candidates.
+ * @param jobId - The ID of the job.
+ * @param query - Search term for candidates.
+ * @param currentPage - The current pagination page.
+ * @returns A Promise resolving to an array of CandidateDocuments.
+ */
 export async function fetchFilteredTalents(
   jobId: string,
   query: string,
@@ -339,6 +410,11 @@ export async function fetchFilteredTalents(
   }
 }
 
+/**
+ * Fetches a single candidate/talent profile by their document ID.
+ * @param id - The ObjectId string of the candidate.
+ * @returns A Promise resolving to a CandidateDocument.
+ */
 export async function fetchTalentById(id: string): Promise<CandidateDocument> {
   try {
     if (!ObjectId.isValid(id)) {
@@ -380,22 +456,25 @@ export async function fetchTalentById(id: string): Promise<CandidateDocument> {
   }
 }
 
+/**
+ * Convenience wrapper to fetch the top n highest-ranked candidates for a specific job.
+ * @param jobId - The ID of the job.
+ * @param top_n - Number of top talent to fetch.
+ * @returns A Promise resolving to an array of CandidateDocuments.
+ */
 export async function fetchTopTalents(
   jobId: string,
+  top_n: number = 3,
 ): Promise<CandidateDocument[]> {
-  return fetchCandidates(jobId, 3);
+  return fetchCandidates(jobId, top_n);
 }
 
-export type UploadRecord = {
-  _id: string;
-  filename: string;
-  file_type: string;
-  status: "success" | "partial" | "failed";
-  candidates_parsed: number;
-  errors: string[];
-  uploaded_at: string;
-};
-
+/**
+ * Fetches the resume parsing and upload logs for a specific job.
+ * @param jobId - The ID of the job.
+ * @param limit - Maximum number of logs to return.
+ * @returns A Promise resolving to an array of UploadRecords.
+ */
 export async function fetchUploadHistory(
   jobId: string,
   limit: number = 20,
@@ -424,6 +503,11 @@ export async function fetchUploadHistory(
   }
 }
 
+/**
+ * Fetches counts for Total Candidates and Screened Candidates for a specific job.
+ * @param jobId - The ID of the job.
+ * @returns A Promise resolving to an object with total and screened counts.
+ */
 export async function fetchCandidateCounts(
   jobId: string,
 ): Promise<{ total: number; screened: number }> {
@@ -443,6 +527,12 @@ export async function fetchCandidateCounts(
   }
 }
 
+/**
+ * Calculates total pages required for the Candidates table pagination inside a Job Details view.
+ * @param jobId - The ID of the job.
+ * @param query - The current search query.
+ * @returns A Promise resolving to a number representing total pages.
+ */
 export async function fetchTalentPages(
   jobId: string,
   query: string,
@@ -474,15 +564,16 @@ export async function fetchTalentPages(
   }
 }
 
-export type ResultRow = {
-  job_id: string;
-  role: string;
-  company: string;
-  created_at: string;
-  status: string;
-  total_talent: number;
-};
-
+// ==========================================
+// RESULTS & AI SCREENING TYPES
+// ==========================================
+/**
+ * Legacy fetcher for finding jobs marked as "done".
+ * @param userId - The ID of the currently logged-in user.
+ * @param query - The search string.
+ * @param currentPage - The current page number.
+ * @returns A Promise resolving to an array of ResultRows.
+ */
 export async function fetchResults(
   userId: string,
   query: string,
@@ -530,8 +621,12 @@ export async function fetchResults(
   }
 }
 
-// Fetch Jobs for the Dropdown Filter
-export async function fetchJobsForFilter(userId: string) {
+/**
+ * Fetches a lightweight list of the user's jobs to populate dropdown filters.
+ * @param userId - The ID of the currently logged-in user.
+ * @returns A Promise resolving to an array of FilterJobs.
+ */
+export async function fetchJobsForFilter(userId: string): Promise<FilterJob[]> {
   try {
     const db = await getDb();
     const jobs = await db
@@ -551,7 +646,14 @@ export async function fetchJobsForFilter(userId: string) {
   }
 }
 
-// Fetch Screened Candidates (The Table Data)
+/**
+ * Advanced Omni-search fetcher for the Global AI Results page.
+ * @param userId - The ID of the currently logged-in user.
+ * @param query - The string or number searched by the user.
+ * @param currentPage - The current pagination page.
+ * @param jobId - Optional. A specific job ID to filter the results by.
+ * @returns A Promise resolving to an array of CandidateDocuments merged with a job_title.
+ */
 export async function fetchScreenedCandidates(
   userId: string,
   query: string,
@@ -656,6 +758,13 @@ export async function fetchScreenedCandidates(
   }
 }
 
+/**
+ * Calculates total pages and total candidate count for the Global AI Results page.
+ * @param userId - The ID of the currently logged-in user.
+ * @param query - The active search string/number.
+ * @param jobId - Optional. The currently selected job filter.
+ * @returns A Promise resolving to an object containing totalPages and totalCount.
+ */
 export async function fetchResultPages(
   userId: string,
   query: string,

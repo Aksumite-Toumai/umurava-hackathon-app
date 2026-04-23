@@ -1,3 +1,5 @@
+import { ScreeningResult } from "./schemas/candidate";
+
 // User Types
 export type User = {
   id: string;
@@ -86,4 +88,53 @@ export type Talent = {
   portofolio_ratings?: Record<string, number> | null;
   personality_insights?: string | null;
   created_at?: string | null;
+};
+
+// ==========================================
+// DASHBOARD & CHART TYPES
+// ==========================================
+export type DashboardStats = {
+  totalJobs: number;
+  pendingJobs: number;
+  doneJobs: number;
+  totalCandidates: number;
+  screenedCandidates: number;
+};
+
+export type ChartData = {
+  jobTitle: string;
+  candidates: number;
+  id: string;
+};
+
+export type TopTalent = {
+  id: string;
+  name: string;
+  email: string;
+  screening: ScreeningResult;
+  job_applied_for: string;
+};
+
+export type UploadRecord = {
+  _id: string;
+  filename: string;
+  file_type: string;
+  status: "success" | "partial" | "failed";
+  candidates_parsed: number;
+  errors: string[];
+  uploaded_at: string;
+};
+
+export type ResultRow = {
+  job_id: string;
+  role: string;
+  company: string;
+  created_at: string;
+  status: string;
+  total_talent: number;
+};
+
+export type FilterJob = {
+  _id: string;
+  role: string;
 };
