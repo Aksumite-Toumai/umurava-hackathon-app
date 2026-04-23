@@ -13,7 +13,7 @@ export default async function LatestTopTalents({
   const t = await getTranslations("Dashboard.charts");
 
   return (
-    <div className="flex w-full flex-col md:col-span-4">
+    <div className={`flex w-full flex-col md:col-span-4 ${lusitana.className}`}>
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         {t("latest_talents")}
       </h2>
@@ -45,13 +45,14 @@ export default async function LatestTopTalents({
                     <p className="hidden text-sm text-gray-500 sm:block">
                       {talent.email}
                     </p>
+                    <p
+                      className={`${lusitana.className} text-sm font-medium md:text-base text-orange-800`}
+                    >
+                      Score: {talent.screening?.final_score || 0.0}%
+                    </p>
                   </div>
                 </div>
-                <p
-                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
-                >
-                  {talent.screening?.rank}
-                </p>
+
                 <ViewTalent id={talent.id} />
               </div>
             );

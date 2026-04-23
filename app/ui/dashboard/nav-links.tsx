@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
+import { lusitana } from "@/app/ui/fonts";
 
 const links = [
   { key: "home", href: "/dashboard", icon: HomeIcon },
@@ -35,7 +36,9 @@ export default function NavLinks() {
           >
             <LinkIcon className="w-6" />
 
-            <p className="hidden md:block">{t(link.key)}</p>
+            <p className={`${lusitana.className} text-xl hidden md:block`}>
+              {t(link.key)}
+            </p>
           </Link>
         );
       })}

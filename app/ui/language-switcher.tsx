@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { lusitana } from "@/app/ui/fonts";
 
 const languages = [
   { code: "en", name: "English", icon: "/en.png" },
@@ -108,7 +109,7 @@ export function LanguageSwitcher() {
                     sizes="24px"
                   />
                 </div>
-                {lang.name}
+                <span className={`${lusitana.className}`}>{lang.name}</span>
               </button>
             ))}
           </div>
