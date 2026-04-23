@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 
-import type { UploadRecord } from "@/app/lib/data";
+import type { UploadRecord } from "@/app/lib/definitions";
 
 function formatTime(ts: string): string {
   try {
@@ -35,7 +35,11 @@ function StatusIcon({ status }: { status: UploadRecord["status"] }) {
   return <XCircleIcon className="h-4 w-4 text-red-600" />;
 }
 
-export default function UploadHistory({ uploads }: { uploads: UploadRecord[] }) {
+export default function UploadHistory({
+  uploads,
+}: {
+  uploads: UploadRecord[];
+}) {
   const t = useTranslations("UploadHistory");
   const [expanded, setExpanded] = useState<string | null>(null);
 
