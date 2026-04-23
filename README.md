@@ -1,8 +1,28 @@
-# Umurava Hackathon — AI Talent Screening
+# Umurava Hackathon | Aksumite-Toumai — AI-Powered HR Intelligence
+An intelligent recruitment platform built to help Human Resources professionals automatically parse, screen, and rank candidate resumes against job requirements using AI.
 
-https://competence.umurava.africa/challenges/69ca12dc82d1c3e042ec8f0d
+Umurava Hackathon: [Link](https://competence.umurava.africa/challenges/69ca12dc82d1c3e042ec8f0d)
 
-AI-powered talent screening tool that parses resumes and spreadsheets, scores candidates across 6 weighted categories using Gemini, and produces a ranked shortlist with explanations.
+## 📖 Project Overview
+Aksumite-Toumai solves the most time-consuming part of recruitment: the initial screening phase. By leveraging artificial intelligence, our platform analyzes uploaded candidate resumes, compares them against specific job requirements, and provides a ranked, data-driven dashboard for HR teams. 
+
+**Key Features:**
+- 🌍 **Multilingual Interface:** Fully localized in English, French, and Kinyarwanda.
+- 📊 **Advanced Dashboard:** Visual analytics for job postings and talent pipelines.
+- 🤖 **AI Screening:** Automated resume parsing, scoring, and strength/gap analysis.
+- 🔍 **Omni-Search:** Instantly filter candidates by name, AI score, or key strengths.
+
+## 🏗️ Architecture
+
+Our application is built using a modern, serverless stack designed for performance and scale:
+- **Frontend:** Next.js 15 (App Router), React, Tailwind CSS
+- **Backend:** Next.js Server Actions & API Routes
+- **Database:** MongoDB Atlas (NoSQL for flexible resume data storage)
+- **Authentication:** NextAuth.js (Session-based secure logins)
+- **Internationalization:** `next-intl`
+- **Deployment:** Vercel (Continuous Deployment)
+
+![Architecture Diagram](/diagram.png)
 
 ## Tech Stack
 
@@ -13,7 +33,9 @@ AI-powered talent screening tool that parses resumes and spreadsheets, scores ca
 - **Parsing:** LlamaParse (PDF), PapaParse (CSV), xlsx (Excel)
 - **Styling:** Tailwind CSS
 
-## Prerequisites
+## ⚙️ Setup Instructions
+
+### Prerequisites
 
 - Node.js v20+
 - pnpm
@@ -21,7 +43,7 @@ AI-powered talent screening tool that parses resumes and spreadsheets, scores ca
 - Gemini API key ([Google AI Studio](https://aistudio.google.com/apikey))
 - LlamaCloud API key ([LlamaCloud](https://cloud.llamaindex.ai))
 
-## Setup
+### Setup
 
 ```bash
 pnpm install
