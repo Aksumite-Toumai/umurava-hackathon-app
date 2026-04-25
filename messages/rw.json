@@ -93,16 +93,33 @@
   },
   "UploadCandidates": {
     "title": "Shyiramo Abakandida",
-    "drop_hint": "Shyira dosiye hano cyangwa kanda ushakishe",
-    "supported": "PDF, CSV, XLSX, JSON biremewe",
-    "upload_button": "Shyiramo dosiye {count}",
-    "upload_button_plural": "Shyiramo dosiye {count}",
-    "uploading": "Birashyirwamo..."
+    "info_title": "Amabwiriza yo gushyiramo dosiye",
+    "scenario_cv_title": "1. Dosiye z'umuntu ku giti cye (PDF)",
+    "scenario_cv_desc": "Shyiramo dosiye z'imyirondoro. AI izahita isoma inyandiko iyishyire muri sisitemu yacu.",
+    "scenario_csv_title": "2. Gushyiramo benshi byoroheje (CSV)",
+    "scenario_csv_desc": "Ku myirondoro y'ibanze, koresha CSV. Koresha amazina y'inkingi nk'uko bigaragara hano hasi. Ubumenyi bwinshi bugomba gushyirwa mu twuguruzo n'utwugarizo, bugatandukanywa n'akitso.",
+    "csv_example_note": "Icyitonderwa: CSV yakira amakuru yoroheje gusa. Ku mateka arambuye, koresha JSON.",
+    "scenario_json_title": "3. Gushyiramo benshi birambuye (JSON)",
+    "scenario_json_desc": "Kuri profayiri zuzuye zirimo amakuru yimbitse (urugero: Urwego rw'ubumenyi, Amateka y'akazi), koresha dosiye ya .JSON.",
+    "mandatory_fields": "Ibigomba kubamo",
+    "optional_fields": "Ibitari ngombwa cyane",
+    "drop_files": "Zana dosiye hano cyangwa kanda ushakishe",
+    "upload_in_progress": "Birimo gushyirwamo...",
+    "supported_formats": "Twemera PDF, CSV, XLSX, na JSON",
+    "files_selected": "Dosiye {count} zihiswemo zigiye gusuzumwa",
+    "clear_selection": "Siba ibyo wahisemo",
+    "start_upload": "Tangira Gusuzuma",
+    "processing": "Gutunganya dosiye...",
+    "upload_complete": "Byarangiye",
+    "successfully_parsed": "Izasuzumwe neza:",
+    "failed_to_process": "Izananiranye:"
   },
   "UploadHistory": {
-    "title": "Amateka yo Gushyiramo",
-    "failed": "{count} byanze",
-    "partial": "{count} bike"
+    "title": "Amateka y'ibyashyizwemo",
+    "files_uploaded_on": "Dosiye {count} zashyizwemo ku wa {date}",
+    "candidates_parsed": "Abakandida {count} basuzumwe",
+    "files_failed": "{count} zanze",
+    "error_log": "Amakosa yagaragaye"
   },
   "EmailCandidates": {
     "button": "Ohereza Abakandida Imeyili",
