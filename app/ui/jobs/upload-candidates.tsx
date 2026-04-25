@@ -146,6 +146,8 @@ export default function UploadCandidates({ jobId }: { jobId: string }) {
                 </div>
                 <button
                   onClick={clearFiles}
+                  title={t("clear_selection")}
+                  aria-label={t("clear_selection")}
                   className="text-amber-700 hover:text-red-600"
                 >
                   <XMarkIcon className="h-5 w-5" />
