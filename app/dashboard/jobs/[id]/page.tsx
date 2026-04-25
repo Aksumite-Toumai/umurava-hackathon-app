@@ -57,8 +57,7 @@ export default async function Page(props: {
   const t = await getTranslations("JobDetailsPage");
   const locale = await getLocale();
 
-  let job, candidates, counts, uploads;
-  [job, candidates, counts, uploads] = await Promise.all([
+  const [job, candidates, counts, uploads] = await Promise.all([
     fetchJobById(id),
     fetchCandidates(id, 3),
     fetchCandidateCounts(id),

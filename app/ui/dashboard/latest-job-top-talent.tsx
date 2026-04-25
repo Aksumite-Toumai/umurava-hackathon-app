@@ -1,14 +1,16 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+
 import { lusitana } from "@/app/ui/fonts";
 import { ViewTalent } from "../talents/button";
-import { getTranslations } from "next-intl/server";
+import type { TopTalent } from "@/app/lib/definitions";
 
 export default async function LatestTopTalents({
   talents,
 }: {
-  talents: Record<string, any>[];
+  talents: TopTalent[];
 }) {
   const t = await getTranslations("Dashboard.charts");
 

@@ -13,8 +13,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
 import { updateJobAction } from "@/app/lib/actions";
+import type { JobDocument } from "@/app/lib/schemas/job";
 
-export default function EditJobForm({ job }: { job: any }) {
+export default function EditJobForm({ job }: { job: JobDocument }) {
   const [state, formAction, isPending] = useActionState(
     updateJobAction,
     undefined,
@@ -22,7 +23,7 @@ export default function EditJobForm({ job }: { job: any }) {
 
   return (
     <form action={formAction}>
-      <input type="hidden" name="job_id" value={job._id || job.id} />
+      <input type="hidden" name="job_id" value={job._id} />
 
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Job Role */}
@@ -79,7 +80,7 @@ export default function EditJobForm({ job }: { job: any }) {
                 id="experience"
                 name="experience"
                 type="text"
-                defaultValue={job.experience}
+                defaultValue={job.experience ?? ""}
                 placeholder="e.g., 3+ years in software development"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 focus:border-amber-700 focus:ring-1 focus:ring-amber-700"
               />
@@ -98,7 +99,7 @@ export default function EditJobForm({ job }: { job: any }) {
                 id="skills"
                 name="skills"
                 type="text"
-                defaultValue={job.skills}
+                defaultValue={job.skills ?? ""}
                 placeholder="e.g., Python, FastAPI, MongoDB, React"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 focus:border-amber-700 focus:ring-1 focus:ring-amber-700"
               />
@@ -120,7 +121,7 @@ export default function EditJobForm({ job }: { job: any }) {
                 id="requirements"
                 name="requirements"
                 rows={4}
-                defaultValue={job.requirements}
+                defaultValue={job.requirements ?? ""}
                 placeholder="Describe the responsibilities and requirements..."
                 className="peer block w-full rounded-md border border-gray-200 py-3 pl-10 text-sm outline-2 placeholder:text-gray-500 focus:border-amber-700 focus:ring-1 focus:ring-amber-700"
               />
