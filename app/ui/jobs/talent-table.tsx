@@ -88,8 +88,7 @@ export default async function Table({
                   return (
                     <div
                       key={talent._id}
-                      className={`mb-2 w-full overflow-hidden rounded-md border-l-4 p-4 ${style.row}`}
-                      style={{ borderLeftColor: undefined }}
+                      className={`mb-2 w-full overflow-hidden rounded-md p-4 ${style.row}`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span
