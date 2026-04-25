@@ -92,17 +92,34 @@
     "loading": "Évaluation..."
   },
   "UploadCandidates": {
-    "title": "Téléverser des candidats",
-    "drop_hint": "Déposez les fichiers ici ou cliquez pour parcourir",
-    "supported": "PDF, CSV, XLSX, JSON pris en charge",
-    "upload_button": "Téléverser {count} fichier",
-    "upload_button_plural": "Téléverser {count} fichiers",
-    "uploading": "Téléversement..."
+    "title": "Télécharger des Candidats",
+    "info_title": "Directives de téléchargement",
+    "scenario_cv_title": "1. CV individuels (PDF / DOCX)",
+    "scenario_cv_desc": "Téléchargez les fichiers de CV standards. L'IA analysera automatiquement le texte et l'associera à notre base de données.",
+    "scenario_csv_title": "2. Importation simple en masse (CSV)",
+    "scenario_csv_desc": "Pour les profils basiques, utilisez un fichier CSV avec les en-têtes exacts ci-dessous. Les compétences multiples doivent être entre guillemets et séparées par des virgules.",
+    "csv_example_note": "Remarque : Les CSV ne supportent que les données plates. Pour l'historique complet, utilisez JSON.",
+    "scenario_json_title": "3. Importation complexe en masse (JSON)",
+    "scenario_json_desc": "Pour des profils complets incluant des tableaux imbriqués (ex: Niveaux de compétences, Historique d'emploi), téléchargez un fichier .JSON structuré.",
+    "mandatory_fields": "Clés requises",
+    "optional_fields": "Clés optionnelles",
+    "drop_files": "Déposez les fichiers ici ou cliquez pour parcourir",
+    "upload_in_progress": "Téléchargement en cours...",
+    "supported_formats": "Formats pris en charge : PDF, CSV, XLSX, JSON",
+    "files_selected": "{count} fichiers sélectionnés prêts à être analysés",
+    "clear_selection": "Effacer la sélection",
+    "start_upload": "Démarrer l'analyse",
+    "processing": "Traitement des fichiers...",
+    "upload_complete": "Téléchargement terminé",
+    "successfully_parsed": "Analysés avec succès :",
+    "failed_to_process": "Échec du traitement :"
   },
   "UploadHistory": {
-    "title": "Historique des téléversements",
-    "failed": "{count} échoué(s)",
-    "partial": "{count} partiel(s)"
+    "title": "Historique des téléchargements",
+    "files_uploaded_on": "{count} fichiers téléchargés le {date}",
+    "candidates_parsed": "{count} candidats analysés",
+    "files_failed": "{count} échecs",
+    "error_log": "Journal des erreurs (Récents)"
   },
   "EmailCandidates": {
     "button": "E-mailer les candidats",

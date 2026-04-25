@@ -93,16 +93,33 @@
   },
   "UploadCandidates": {
     "title": "Upload Candidates",
-    "drop_hint": "Drop files here or click to browse",
-    "supported": "PDF, CSV, XLSX, JSON supported",
-    "upload_button": "Upload {count} file",
-    "upload_button_plural": "Upload {count} files",
-    "uploading": "Uploading..."
+    "info_title": "Data Upload Guidelines",
+    "scenario_cv_title": "1. Individual Resumes (PDF / DOCX)",
+    "scenario_cv_desc": "Upload standard resume files for each candidate. The AI will automatically parse the text and map it to our database schema.",
+    "scenario_csv_title": "2. Simple Bulk Upload (CSV)",
+    "scenario_csv_desc": "For basic profiles, you can upload a CSV file. Use the exact column headers shown below. Multiple skills should be wrapped in quotes and separated by commas.",
+    "csv_example_note": "Note: CSVs only support flat data. For deep experience and education history, use JSON.",
+    "scenario_json_title": "3. Complex Bulk Upload (JSON)",
+    "scenario_json_desc": "For full Umurava profiles including nested arrays (e.g., exact Skill Levels, full Employment History, Education), upload a structured .JSON file mapping exactly to our schema.",
+    "mandatory_fields": "Required Schema Keys",
+    "optional_fields": "Optional Schema Keys",
+    "drop_files": "Drop files here or click to browse",
+    "upload_in_progress": "Upload in progress...",
+    "supported_formats": "PDF, CSV, XLSX, JSON supported",
+    "files_selected": "{count} files selected ready to parse",
+    "clear_selection": "Clear selection",
+    "start_upload": "Start Upload & Parsing",
+    "processing": "Processing files...",
+    "upload_complete": "Upload Complete",
+    "successfully_parsed": "Successfully parsed:",
+    "failed_to_process": "Failed to process:"
   },
   "UploadHistory": {
     "title": "Upload History",
-    "failed": "{count} failed",
-    "partial": "{count} partial"
+    "files_uploaded_on": "{count} files uploaded on {date}",
+    "candidates_parsed": "{count} candidates parsed",
+    "files_failed": "{count} failed",
+    "error_log": "Error Log (Recent)"
   },
   "EmailCandidates": {
     "button": "Email Candidates",
